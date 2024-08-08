@@ -24,8 +24,19 @@ namespace SolarSystem {
 
 		circle_->setRadius(radius_);
 		circle_->setPointCount(50);
-		circle_->setPosition(200.f, 200.f);
 
+	}
+
+	sf::Vector2f Planet::GetCenter(float w, float h) {
+		return { w - circle_->getRadius(), h - circle_->getRadius() };
+	}
+
+	float Planet::AngleToRad(float angle) {
+		return 3.14159 / 180 * angle;
+	}
+
+	float Planet::RadToAngle(float rad) {
+		return rad * 180 / 3.14159;
 	}
 
 	// public
@@ -36,24 +47,32 @@ namespace SolarSystem {
 	void Planet::UpdatePosition(float dt) {
 
 		//circle_->set
-
-
+		auto offset = GetCenter(400, 300);
+		float elipse_a = 200, elipse_b = 100;
+		//circle_->setPosition(offset);
 		circle_->setPosition(
-			circle_->getPosition().x + sin(3.14159 * angle_ / 180),
-			circle_->getPosition().y + 0.5 * cos(3.14159 * angle_ / 180)
+			offset.x + ((elipse_a) * cos(AngleToRad(angle_)) + (elipse_a) * sin(AngleToRad(angle_))),
+			offset.y + ((-elipse_b) * sin(AngleToRad(angle_)) + (elipse_b) * cos(AngleToRad(angle_)))
 		);
-
-		
-		if (angle_ >= 90 && angle_ < 270)
-			radius_ -= sin(3.14159 / 180 * abs(angle_ - 180));
-		else
-			radius_ += sin(3.14159 / 180 * abs(angle_ - 180));
-
-		angle_ += 50 * dt;
-
+		float dt_scale = 20;
+		angle_ += dt_scale * dt;
 		if (angle_ > 360) angle_ -= 360;
+		auto res = RadToAngle(atan(elipse_b / elipse_a));
+		
+		if (angle_ > 270 + res || angle_ <= 90 + res) {
+			auto delta = (dt_scale * 0.2) / 50 * sin(AngleToRad(abs(90 - abs(angle_ - 180))));
+			radius_ -= delta;
+			
+		}
+		else {
+			auto delta = (dt_scale * 0.15) / 50 * sin(AngleToRad(abs(90 - abs(angle_ - 180))));
+			radius_ += delta;
+			
+		}
+		
+
 		circle_->setRadius(radius_);
-		std::cout << angle_ << std::endl;
+		
 	}
 	
 

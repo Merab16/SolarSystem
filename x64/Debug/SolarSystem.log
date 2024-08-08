@@ -1,6 +1,0 @@
-﻿  SolarSystem.cpp
-D:\C++\SFML\SolarSystem\SolarSystem\Sources\SolarSystem.cpp(43,29): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-D:\C++\SFML\SolarSystem\SolarSystem\Sources\SolarSystem.cpp(42,29): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-D:\C++\SFML\SolarSystem\SolarSystem\Sources\SolarSystem.cpp(48,18): warning C4244: -=: преобразование "double" в "float", возможна потеря данных
-D:\C++\SFML\SolarSystem\SolarSystem\Sources\SolarSystem.cpp(50,18): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-  SolarSystem.vcxproj -> D:\C++\SFML\SolarSystem\x64\Debug\SolarSystem.exe

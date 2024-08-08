@@ -17,6 +17,9 @@ namespace SolarSystem {
 
 	private:
 		void Initialization();
+		sf::Vector2f GetCenter(float w, float h);
+		float AngleToRad(float angle);
+		float RadToAngle(float rad);
 
 	public:
 		Planet();

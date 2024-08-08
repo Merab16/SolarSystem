@@ -87,8 +87,11 @@ namespace MyWindow {
 	}
 
 	void Window::Draw() {
-		cursor_.Draw(*window_);
+		
 		planet_.Draw(*window_);
+
+
+		cursor_.Draw(*window_);
 		window_->draw(fps_);
 	}
 

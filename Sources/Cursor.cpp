@@ -17,10 +17,13 @@ namespace MyCursor {
 
 		text_.setFont(font_);
 		text_.setCharacterSize(16);
-		//text_.setFillColor(sf::Color{ 150, 150, 150 });
+		text_.setFillColor(sf::Color{ 90, 160, 190 });
 
 		
 	}
+
+
+
 
 	// public
 	void Cursor::UpdatePos(const sf::RenderWindow& window) {
