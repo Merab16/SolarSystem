@@ -8,7 +8,8 @@ namespace MyWindow {
 	Window::Window(unsigned width, unsigned height, std::string wnd_name)
 		: width_(width)
 		, height_(height)
-		, window_(new sf::RenderWindow(sf::VideoMode(width_, height_), wnd_name))
+		, settings_(0, 0, 8)
+		, window_(new sf::RenderWindow(sf::VideoMode(width_, height_), wnd_name, sf::Style::Default, settings_))
 	{
 		Initialization();
 	}

@@ -15,20 +15,30 @@ namespace SolarSystem {
 	// private
 	void Planet::Initialization() {
 
-		circle_ = std::make_shared<sf::CircleShape>();
-		sprite_ = std::make_shared<sf::Sprite>();
-		texture_ = std::make_shared<sf::Texture>();
-		image_ = std::make_shared<sf::Image>();
+		circle_ = std::make_unique<sf::CircleShape>();
+		sprite_ = std::make_unique<sf::Sprite>();
+		texture_ = std::make_unique<sf::Texture>();
+		image_ = std::make_unique<sf::Image>();
+		ellipse_ = std::make_unique<sf::CircleShape>();
 
+		max_radius_ = radius_;
+		min_radius_ = 0.1 * radius_;
 
+		
+		/*ellipse_->setFillColor(sf::Color::Transparent);
+		ellipse_->setOutlineThickness(2);
+		ellipse_->setOutlineColor(sf::Color::Green);
+		ellipse_->setRadius(ellipse_a);
+		ellipse_->setScale(1.5, 1);
+		ellipse_->setPosition({400 - 3 * ellipse_a / 2, 300 - ellipse_b / 2});*/
 
 		circle_->setRadius(radius_);
 		circle_->setPointCount(50);
 
 	}
 
-	sf::Vector2f Planet::GetCenter(float w, float h) {
-		return { w - circle_->getRadius(), h - circle_->getRadius() };
+	sf::Vector2f Planet::GetCenter(float w, float h, const sf::CircleShape& shape) {
+		return { w - shape.getRadius(), h - shape.getRadius() };
 	}
 
 	float Planet::AngleToRad(float angle) {
@@ -41,33 +51,36 @@ namespace SolarSystem {
 
 	// public
 	void Planet::Draw(sf::RenderWindow& window) {
+		window.draw(*ellipse_);
 		window.draw(*circle_);
+		
 	}
 
 	void Planet::UpdatePosition(float dt) {
 
 		//circle_->set
-		auto offset = GetCenter(400, 300);
-		float elipse_a = 200, elipse_b = 100;
+		auto offset = GetCenter(400, 300, *circle_);
 		//circle_->setPosition(offset);
 		circle_->setPosition(
-			offset.x + ((elipse_a) * cos(AngleToRad(angle_)) + (elipse_a) * sin(AngleToRad(angle_))),
-			offset.y + ((-elipse_b) * sin(AngleToRad(angle_)) + (elipse_b) * cos(AngleToRad(angle_)))
+			offset.x + ((ellipse_a) * cos(AngleToRad(angle_)) + (ellipse_a) * sin(AngleToRad(angle_))),
+			offset.y + ((-ellipse_b) * sin(AngleToRad(angle_)) + (ellipse_b) * cos(AngleToRad(angle_)))
 		);
 		float dt_scale = 20;
 		angle_ += dt_scale * dt;
 		if (angle_ > 360) angle_ -= 360;
-		auto res = RadToAngle(atan(elipse_b / elipse_a));
-		
+		auto res = RadToAngle(atan(ellipse_b / ellipse_a));
+
+		auto delta = 0.04 * abs(cos(AngleToRad((360 + res) - angle_ )));
+		//std::cout << angle_ - res << std::endl;
+		//std::cout << delta << std::endl;
+		//std::cout << radius_ << std::endl;
 		if (angle_ > 270 + res || angle_ <= 90 + res) {
-			auto delta = (dt_scale * 0.2) / 50 * sin(AngleToRad(abs(90 - abs(angle_ - 180))));
-			radius_ -= delta;
-			
+ 			if (radius_ > min_radius_)
+				radius_ -= delta;
 		}
 		else {
-			auto delta = (dt_scale * 0.15) / 50 * sin(AngleToRad(abs(90 - abs(angle_ - 180))));
-			radius_ += delta;
-			
+			if (radius_ < max_radius_)
+				radius_ += delta;
 		}
 		
 

@@ -15,7 +15,9 @@ namespace MyWindow {
 		// window
 		unsigned width_;
 		unsigned height_;
+		sf::ContextSettings settings_;
 		std::shared_ptr<sf::RenderWindow> window_;
+		
 
 		// cursor
 		MyCursor::Cursor cursor_;

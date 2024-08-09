@@ -21,5 +21,18 @@ namespace GeometricPrimitive {
 		~Rectangle();
 
 	};
+
+
+	class Ellipse : public sf::CircleShape {
+	private:
+
+
+	private:
+
+
+	public:
+
+
+	};
 }
 
