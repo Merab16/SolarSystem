@@ -76,7 +76,7 @@ namespace SolarSystem {
 			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
 		);
 		  
-		angle_ += (velocity_ * dt);
+		angle_ += (velocity_ * dt + 1 / ellipseA_);
 		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
 		//std::cout << dt << std::endl;

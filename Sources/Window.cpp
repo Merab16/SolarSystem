@@ -100,9 +100,9 @@ namespace MyWindow {
 
 	// planets 
 	void Window::PlanetsInitialization() {
-		planets_.push_back(SolarSystem::Planet(50, 100));
+		planets_.push_back(SolarSystem::Planet(20, 50));
 		planets_.push_back(SolarSystem::Planet(20, 120));
-		planets_.push_back(SolarSystem::Planet(30, 130));
+		planets_.push_back(SolarSystem::Planet(40, 80));
 
 	}
 
