@@ -12,6 +12,7 @@ namespace MyWindow {
 		, window_(new sf::RenderWindow(sf::VideoMode(width_, height_), wnd_name, sf::Style::Default, settings_))
 	{
 		Initialization();
+		PlanetsInitialization();
 	}
 
 	Window::~Window() {
@@ -38,7 +39,7 @@ namespace MyWindow {
 		UpdateSFMLEvents();
 		
 
-		planet_.UpdatePosition(dt_);
+		PlanetsUpdate();
 	}
 
 	void Window::UpdateSFMLEvents() {
@@ -89,13 +90,34 @@ namespace MyWindow {
 
 	void Window::Draw() {
 		
-		planet_.Draw(*window_);
+		PlanetsDraw();
 
 
 		cursor_.Draw(*window_);
 		window_->draw(fps_);
 	}
 
+
+	// planets 
+	void Window::PlanetsInitialization() {
+		planets_.push_back(SolarSystem::Planet(50, 100));
+		planets_.push_back(SolarSystem::Planet(20, 120));
+		planets_.push_back(SolarSystem::Planet(30, 130));
+
+	}
+
+	void Window::PlanetsUpdate() {
+		for (auto& planet : planets_) {
+			planet.UpdatePosition(dt_);
+		}
+	}
+
+	void Window::PlanetsDraw() const {
+		for (const auto& planet : planets_) {
+			planet.Draw(*window_);
+		}
+		
+	}
 
 	// public
 	void Window::Run() {

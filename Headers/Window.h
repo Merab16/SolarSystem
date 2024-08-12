@@ -7,6 +7,7 @@
 #include "Cursor.h"
 #include "GeometicPrimitive.h"
 #include "SolarSystem.h"
+#include "General.h"
 
 
 namespace MyWindow {
@@ -23,7 +24,7 @@ namespace MyWindow {
 		MyCursor::Cursor cursor_;
 
 		// planets
-		SolarSystem::Planet planet_;
+		std::vector<SolarSystem::Planet> planets_;
 		
 
 		// fps
@@ -46,9 +47,14 @@ namespace MyWindow {
 
 		// mouse funcs
 		
+		// planets
+		void PlanetsInitialization();
+		void PlanetsUpdate();
+		void PlanetsDraw() const;
 
 	public:
-		Window(unsigned width = 800, unsigned height = 600, std::string wnd_name = "SFML Application");
+		Window(unsigned width = General::WIDTH, unsigned height = General::HEIGHT,
+			std::string wnd_name = "SFML Application");
 		~Window();
 
 

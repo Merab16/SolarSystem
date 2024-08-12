@@ -7,8 +7,17 @@
 
 namespace SolarSystem {
 
-	Planet::Planet() {
+	Planet::Planet(float radius, float distance)
+		: radius_(radius)
+		, distance_(distance)
+		, ellipseA_(2 * distance)
+		, ellipseB_(distance)
+		, velocity_(radius * 0.1)
+	{
 		Initialization();
+		angle_ = 45; 
+		offsetAngle_ = 45;
+		//RadToAngle(atan(ellipseB_ / ellipseA_));
 	}
 
 
@@ -50,7 +59,7 @@ namespace SolarSystem {
 	}
 
 	// public
-	void Planet::Draw(sf::RenderWindow& window) {
+	void Planet::Draw(sf::RenderWindow& window) const {
 		window.draw(*ellipse_);
 		window.draw(*circle_);
 		
@@ -58,23 +67,27 @@ namespace SolarSystem {
 
 	void Planet::UpdatePosition(float dt) {
 
-		//circle_->set
-		auto offset = GetCenter(400, 300, *circle_);
-		//circle_->setPosition(offset);
+		
+		auto offset = GetCenter(General::WIDTH / 2, General::HEIGHT / 2, *circle_);
+		//auto res = RadToAngle(atan(ellipseB_ / ellipseA_));
+		// changing position via ellipse
 		circle_->setPosition(
-			offset.x + ((ellipse_a) * cos(AngleToRad(angle_)) + (ellipse_a) * sin(AngleToRad(angle_))),
-			offset.y + ((-ellipse_b) * sin(AngleToRad(angle_)) + (ellipse_b) * cos(AngleToRad(angle_)))
+			offset.x + ((ellipseA_) * cos(AngleToRad(angle_)) + (ellipseA_) * sin(AngleToRad(angle_))),
+			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
 		);
-		float dt_scale = 20;
-		angle_ += dt_scale * dt;
-		if (angle_ > 360) angle_ -= 360;
-		auto res = RadToAngle(atan(ellipse_b / ellipse_a));
+		  
+		angle_ += (velocity_ * dt);
+		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
-		auto delta = 0.04 * abs(cos(AngleToRad((360 + res) - angle_ )));
-		//std::cout << angle_ - res << std::endl;
-		//std::cout << delta << std::endl;
-		//std::cout << radius_ << std::endl;
-		if (angle_ > 270 + res || angle_ <= 90 + res) {
+		//std::cout << dt << std::endl;
+		
+
+		//auto delta = 0.04 * abs(cos(AngleToRad((360 + res) - angle_ ))) * 0.01 * ((3.14159 * radius_) / velocity_);
+
+		auto delta = 0.005 * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
+		std::cout << angle_ - offsetAngle_ << std::endl;
+
+		if (angle_  > 270 + offsetAngle_ || angle_ <= 90 + offsetAngle_) {
  			if (radius_ > min_radius_)
 				radius_ -= delta;
 		}
@@ -82,8 +95,7 @@ namespace SolarSystem {
 			if (radius_ < max_radius_)
 				radius_ += delta;
 		}
-		
-
+		 
 		circle_->setRadius(radius_);
 		
 	}

@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+
+#include "General.h"
+
 namespace SolarSystem {
 
 	class Planet {
@@ -11,13 +14,15 @@ namespace SolarSystem {
 		std::unique_ptr<sf::Image> image_;
 		std::unique_ptr<sf::CircleShape> ellipse_;
 		
-		float ellipse_a = 200, ellipse_b = 100;
+		float ellipseA_, ellipseB_;
 
 		float angle_ = 0.f;
-		float radius_ = 50.f;
+		float radius_;
 		float max_radius_;
 		float min_radius_;
-		float deltaSpeed_ = 0.1f;
+		float distance_;
+		float velocity_ = 0.1f;
+		float offsetAngle_;
 
 
 
@@ -29,8 +34,8 @@ namespace SolarSystem {
 		float RadToAngle(float rad);
 
 	public:
-		Planet();
-		void Draw(sf::RenderWindow& window);
+		Planet(float radius, float distance);
+		void Draw(sf::RenderWindow& window) const;
 		void UpdatePosition(float dt);
 
 	};
