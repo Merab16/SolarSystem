@@ -17,9 +17,13 @@ namespace MyWindow {
 	}
 
 	Window::~Window() {
-		for (auto& planet : planets_) {
+		for (auto& planet : planetsBehind_) {
 			delete planet;
 		}
+		for (auto& planet : planetsFrontOf_) {
+			delete planet;
+		}
+		delete sun_;
 	}
 
 	// private
@@ -170,7 +174,7 @@ namespace MyWindow {
 
 		
 
-		planets_.push_back(new SolarSystem::Sun(60));
+		sun_ = new SolarSystem::Sun(60);
 
 	}
 
@@ -180,9 +184,9 @@ namespace MyWindow {
 			planet->UpdatePosition(dt_);
 		}
 
-		for (auto& planet : planets_) {
-			planet->UpdatePosition(dt_);
-		}
+		
+		sun_->UpdatePosition(dt_);
+		
 
 		for (auto& planet : planetsFrontOf_) {
 			planet->UpdatePosition(dt_);
@@ -198,9 +202,9 @@ namespace MyWindow {
 			planet->Draw(*window_);
 		}
 
-		for (const auto& planet : planets_) {
-			planet->Draw(*window_);
-		}
+		
+		sun_->Draw(*window_);
+		
 
 		for (const auto& planet : planetsFrontOf_) {
 			planet->Draw(*window_);

@@ -24,7 +24,7 @@ namespace MyWindow {
 		MyCursor::Cursor cursor_;
 
 		// planets
-		std::vector<SolarSystem::Planet*> planets_;
+		SolarSystem::Sun* sun_;
 		std::vector< SolarSystem::Planet*> planetsBehind_;
 		std::vector< SolarSystem::Planet*> planetsFrontOf_;
 
