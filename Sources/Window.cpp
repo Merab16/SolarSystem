@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 
 #include "../Headers/Window.h"
@@ -16,13 +17,17 @@ namespace MyWindow {
 	}
 
 	Window::~Window() {
-
+		for (auto& planet : planets_) {
+			delete planet;
+		}
 	}
 
 	// private
 
 		// general
 	void Window::Initialization() {
+		
+
 		window_->setFramerateLimit(144);
 
 		font_.loadFromFile("Fonts/CascadiaCode.ttf");
@@ -38,7 +43,7 @@ namespace MyWindow {
 
 		UpdateSFMLEvents();
 		
-
+		UpdateDepth();
 		PlanetsUpdate();
 	}
 
@@ -76,6 +81,42 @@ namespace MyWindow {
 		fps_.setString(std::string("FPS: " + std::to_string(int(1.f / dt_))));
 	}
 
+	void Window::UpdateDepth() {
+
+		std::vector<SolarSystem::Planet*> tmp;
+
+		for (auto& planet : planetsBehind_) {
+			tmp.push_back(std::move(planet));
+		}
+
+		for (auto& planet : planetsFrontOf_) {
+			tmp.push_back(std::move(planet));
+		}
+
+		planetsBehind_.clear();
+		planetsFrontOf_.clear();
+
+		for (auto& planet : tmp) {
+			if (planet->GetAngle() >= 180) {
+				planetsFrontOf_.push_back(std::move(planet));
+			}
+			else {
+				planetsBehind_.push_back(std::move(planet));
+			}
+		}
+
+		std::sort(planetsBehind_.begin(), planetsBehind_.end(), []
+			(const SolarSystem::Planet* lhs, const SolarSystem::Planet* rhs) {
+				return lhs->GetDistance() > rhs->GetDistance();
+			});
+
+		std::sort(planetsFrontOf_.begin(), planetsFrontOf_.end(), []
+		(const SolarSystem::Planet* lhs, const SolarSystem::Planet* rhs) {
+				return lhs->GetDistance() < rhs->GetDistance();
+			});
+
+
+	}
 
 	void Window::Render() {
 		// clear
@@ -100,22 +141,75 @@ namespace MyWindow {
 
 	// planets 
 	void Window::PlanetsInitialization() {
-		planets_.push_back(SolarSystem::Planet(20, 50));
-		planets_.push_back(SolarSystem::Planet(20, 120));
-		planets_.push_back(SolarSystem::Planet(40, 80));
+		// PLANETS	dist	D, km	
+		// sun		
+		// mercury	0.39	4.9k
+		// venus	0.72	12.1k
+		// earth	1.		12.7k
+		// mars		1.52	6.8k
+		// jupiter	5.2		139.8k
+		// saturn	9.54	116k
+		// uranus	19.19	50.8k
+		// neptune	30.07	48.6k
+		
+		// min distance - 50
+		//planetsBehind_.push_back(new SolarSystem::Planet(20, 50, sf::Color::Green));
+		//planetsBehind_.push_back(new SolarSystem::Planet(20, 60, sf::Color::Red));
+		//planetsBehind_.push_back(new SolarSystem::Planet(10, 60, sf::Color::Cyan));
+		//planetsBehind_.push_back(new SolarSystem::Planet(40, 90, sf::Color::Magenta));
+		//planetsBehind_.push_back(new SolarSystem::Planet(20, 100));
+
+		planetsBehind_.push_back(new SolarSystem::Planet(5, 50));
+		planetsBehind_.push_back(new SolarSystem::Planet(8, 55));
+		planetsBehind_.push_back(new SolarSystem::Planet(10, 60));
+		planetsBehind_.push_back(new SolarSystem::Planet(6, 70));
+		planetsBehind_.push_back(new SolarSystem::Planet(50, 80));
+		planetsBehind_.push_back(new SolarSystem::Planet(40, 90));
+		planetsBehind_.push_back(new SolarSystem::Planet(20, 100));
+		planetsBehind_.push_back(new SolarSystem::Planet(18, 110));
+
+		
+
+		planets_.push_back(new SolarSystem::Sun(60));
 
 	}
 
 	void Window::PlanetsUpdate() {
-		for (auto& planet : planets_) {
-			planet.UpdatePosition(dt_);
+
+		for (auto& planet : planetsBehind_) {
+			planet->UpdatePosition(dt_);
 		}
+
+		for (auto& planet : planets_) {
+			planet->UpdatePosition(dt_);
+		}
+
+		for (auto& planet : planetsFrontOf_) {
+			planet->UpdatePosition(dt_);
+		}
+
+
+		
 	}
 
 	void Window::PlanetsDraw() const {
-		for (const auto& planet : planets_) {
-			planet.Draw(*window_);
+
+		for (const auto& planet : planetsBehind_) {
+			planet->Draw(*window_);
 		}
+
+		for (const auto& planet : planets_) {
+			planet->Draw(*window_);
+		}
+
+		for (const auto& planet : planetsFrontOf_) {
+			planet->Draw(*window_);
+		}
+
+
+		/*for (const auto& planet : planets_) {
+			planet->Draw(*window_);
+		}*/
 		
 	}
 

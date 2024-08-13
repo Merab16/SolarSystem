@@ -1,8 +1,22 @@
 #include <cmath>
 #include <iostream>
+#include <random>
 
 
 #include "../Headers/SolarSystem.h"
+
+// https://wika.tutoronline.ru/fizika/class/11/solnechnaya-sistema
+// PLANETS	dist	D, km	
+// sun		
+// mercury	0.39	4.9k
+// venus	0.72	12.1k
+// earth	1.		12.7k
+// mars		1.52	6.8k
+// jupiter	5.2		139.8k
+// saturn	9.54	116k
+// uranus	19.19	50.8k
+// neptune	30.07	48.6k
+
 
 
 namespace SolarSystem {
@@ -12,7 +26,7 @@ namespace SolarSystem {
 		, distance_(distance)
 		, ellipseA_(2 * distance)
 		, ellipseB_(distance)
-		, velocity_(radius * 0.1)
+		, velocity_(radius * 0.01)
 	{
 		Initialization();
 		angle_ = 45; 
@@ -23,6 +37,7 @@ namespace SolarSystem {
 
 	// private
 	void Planet::Initialization() {
+		
 
 		circle_ = std::make_unique<sf::CircleShape>();
 		sprite_ = std::make_unique<sf::Sprite>();
@@ -43,6 +58,7 @@ namespace SolarSystem {
 
 		circle_->setRadius(radius_);
 		circle_->setPointCount(50);
+		circle_->setFillColor(RandomColor());
 
 	}
 
@@ -58,9 +74,15 @@ namespace SolarSystem {
 		return rad * 180 / 3.14159;
 	}
 
+	sf::Color Planet::RandomColor() const {
+		std::random_device rd;
+		std::mt19937 mersenne(rd());
+		return sf::Color(mersenne() % 255, mersenne() % 255, mersenne() % 255);
+	}
+
 	// public
 	void Planet::Draw(sf::RenderWindow& window) const {
-		window.draw(*ellipse_);
+		//window.draw(*ellipse_);
 		window.draw(*circle_);
 		
 	}
@@ -76,7 +98,8 @@ namespace SolarSystem {
 			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
 		);
 		  
-		angle_ += (velocity_ * dt + 1 / ellipseA_);
+		// angle_ +=  (10 * velocity_ - ellipseA_ * 0.005) * dt
+		angle_ += (velocity_) * 100 * dt;
 		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
 		//std::cout << dt << std::endl;
@@ -85,7 +108,7 @@ namespace SolarSystem {
 		//auto delta = 0.04 * abs(cos(AngleToRad((360 + res) - angle_ ))) * 0.01 * ((3.14159 * radius_) / velocity_);
 
 		auto delta = 0.005 * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
-		std::cout << angle_ - offsetAngle_ << std::endl;
+		//std::cout << angle_ - offsetAngle_ << std::endl;
 
 		if (angle_  > 270 + offsetAngle_ || angle_ <= 90 + offsetAngle_) {
  			if (radius_ > min_radius_)
@@ -100,5 +123,26 @@ namespace SolarSystem {
 		
 	}
 	
+
+	//===SUN===//
+
+	// constr & destr
+	Sun::Sun(float radius)
+		: Planet(radius, 0)
+	{
+		circle_->setFillColor(sf::Color(200, 210, 21));
+	}
+
+
+	// private
+	void Sun::UpdatePosition(float dt) {
+		auto offset = GetCenter(General::WIDTH / 2, General::HEIGHT / 2, *circle_);
+		circle_->setPosition(offset.x, offset.y);
+		
+	}
+
+	// public
+
+
 
 }

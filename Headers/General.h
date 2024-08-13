@@ -3,8 +3,8 @@
 #include <SFML/Graphics/Font.hpp>
 
 namespace General {
-	constexpr float	WIDTH = 800;
-	constexpr float	HEIGHT = 600;
+	constexpr float	WIDTH = 1024;
+	constexpr float	HEIGHT = 720;
 
 }
 
