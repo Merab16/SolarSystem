@@ -155,27 +155,12 @@ namespace MyWindow {
 		// saturn	9.54	116k
 		// uranus	19.19	50.8k
 		// neptune	30.07	48.6k
-		
-		// min distance - 50
-		//planetsBehind_.push_back(new SolarSystem::Planet(20, 50, sf::Color::Green));
-		//planetsBehind_.push_back(new SolarSystem::Planet(20, 60, sf::Color::Red));
-		//planetsBehind_.push_back(new SolarSystem::Planet(10, 60, sf::Color::Cyan));
-		//planetsBehind_.push_back(new SolarSystem::Planet(40, 90, sf::Color::Magenta));
-		//planetsBehind_.push_back(new SolarSystem::Planet(20, 100));
-
-		planetsBehind_.push_back(new SolarSystem::Planet(5, 50));
-		planetsBehind_.push_back(new SolarSystem::Planet(8, 55));
-		planetsBehind_.push_back(new SolarSystem::Planet(10, 60));
-		planetsBehind_.push_back(new SolarSystem::Planet(6, 70));
-		planetsBehind_.push_back(new SolarSystem::Planet(50, 80));
-		planetsBehind_.push_back(new SolarSystem::Planet(40, 90));
-		planetsBehind_.push_back(new SolarSystem::Planet(20, 100));
-		planetsBehind_.push_back(new SolarSystem::Planet(18, 110));
-
-		
 
 		sun_ = new SolarSystem::Sun(60);
-
+		for (const auto& planet : General::planetsInfo) {
+			planetsBehind_.push_back(new SolarSystem::Planet(planet.name, planet.distance + 30, planet.sunPeriod,
+				planet.diametr, planet.weight, planet.velocity));
+		}
 	}
 
 	void Window::PlanetsUpdate() {
@@ -210,10 +195,6 @@ namespace MyWindow {
 			planet->Draw(*window_);
 		}
 
-
-		/*for (const auto& planet : planets_) {
-			planet->Draw(*window_);
-		}*/
 		
 	}
 

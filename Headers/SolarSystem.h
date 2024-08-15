@@ -8,14 +8,27 @@ namespace SolarSystem {
 
 	class Planet {
 	private:
+		// data
+		std::string name_;
+		float distance_;
+		float sunPeriod_; // day
+		float radius_; // * 10^4
+		float weight_; // * 10^25
+		float velocity_;
+
+		// scales
+		float distanceScale_ = 100;
+
+
+
 		float ellipseA_, ellipseB_;
 
 		float angle_ = 0.f;
-		float radius_;
+		//float radius_;
 		float max_radius_;
 		float min_radius_;
-		float distance_;
-		float velocity_ = 0.1f;
+		//float distance_;
+		//float velocity_ = 0.1f;
 		float offsetAngle_;
 
 		sf::Color color_;
@@ -38,7 +51,8 @@ namespace SolarSystem {
 		std::unique_ptr<sf::CircleShape> ellipse_;
 
 	public:
-		Planet(float radius, float distance);
+		Planet(const std::string& name, float distance, float period,
+			float diametr, float weight, float velocity);
 		void Draw(sf::RenderWindow& window) const;
 		virtual void UpdatePosition(float dt);
 
