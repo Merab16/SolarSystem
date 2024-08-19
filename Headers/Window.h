@@ -28,7 +28,12 @@ namespace MyWindow {
 		std::vector< SolarSystem::Planet*> planetsBehind_;
 		std::vector< SolarSystem::Planet*> planetsFrontOf_;
 
-		
+		// camera
+		sf::View cameraPosition_;
+		sf::Vector2f cameraOffset_;
+		float cameraOffsetScale = 2.f;
+		sf::Vector2f startCamera_{ 0.f, 0.f };
+		bool isPressed_ = false;
 
 		// fps
 		sf::Clock dtClock_;
@@ -48,8 +53,17 @@ namespace MyWindow {
 		void UpdateDepth();
 		void Render();
 		void Draw();
+		void UpdateMenuPosition();
+
 
 		// mouse funcs
+		void MousePressEvent(const sf::Event& e);
+		void MouseReleasedEvent(const sf::Event& e);
+		void MouseMoveEvent(const sf::Event& e);
+		
+
+		// keyboard func
+		void KeyboardPressEvent(int key);
 		
 		// planets
 		void PlanetsInitialization();

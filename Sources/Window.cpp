@@ -31,15 +31,21 @@ namespace MyWindow {
 		// general
 	void Window::Initialization() {
 		
+		// camera
+		cameraOffset_ = sf::Vector2f(General::WIDTH / 2, General::HEIGHT / 2);
+		cameraPosition_.setCenter(cameraOffset_);
+		cameraPosition_.setSize(General::WIDTH, General::HEIGHT);
 
+
+		// window
 		window_->setFramerateLimit(144);
+		window_->setView(cameraPosition_);
 
+		// font && fps
 		font_.loadFromFile("Fonts/CascadiaCode.ttf");
 		fps_.setFont(font_);
 		fps_.setCharacterSize(16);
-		fps_.setPosition(sf::Vector2f{ 0, 10 });
-
-		//window_->setPosition(sf::Vector2i(0, 0));
+		
 	}
 
 	void Window::Update() {
@@ -47,6 +53,8 @@ namespace MyWindow {
 
 		UpdateSFMLEvents();
 		
+		UpdateMenuPosition();
+
 		UpdateDepth();
 		PlanetsUpdate();
 	}
@@ -60,17 +68,19 @@ namespace MyWindow {
 				window_->close();
 				break;
 			case sf::Event::KeyPressed:
-				
+				KeyboardPressEvent(sfEvent.key.code);
 				break;
 
 			case sf::Event::MouseMoved:
-				cursor_.UpdatePos(*window_);
+				MouseMoveEvent(sfEvent);
 				break;
 
 			case sf::Event::MouseButtonPressed:
-				
+				MousePressEvent(sfEvent);
 				break;
-
+			case  sf::Event::MouseButtonReleased:
+				MouseReleasedEvent(sfEvent);
+				break;
 
 
 
@@ -142,6 +152,74 @@ namespace MyWindow {
 		window_->draw(fps_);
 	}
 
+	void Window::UpdateMenuPosition() {
+		fps_.setPosition(sf::Vector2f{ 
+			(cameraOffset_.x - General::WIDTH / 2),
+			(cameraOffset_.y - General::HEIGHT / 2)
+		});
+
+		
+	}
+
+	// mouse funcs
+	void Window::MousePressEvent(const sf::Event& e) {
+		if (e.type == sf::Event::MouseButtonPressed) {
+			if (e.mouseButton.button == sf::Mouse::Left) {
+				startCamera_ = cursor_.GetPosition();
+				isPressed_ = true;
+			}
+		}
+
+	}
+
+	void Window::MouseReleasedEvent(const sf::Event& e) {
+		if (e.type == sf::Event::MouseButtonReleased) {
+			if (e.mouseButton.button == sf::Mouse::Left) {
+				isPressed_ = false;
+
+			}
+		}
+	}
+
+	void Window::MouseMoveEvent(const sf::Event& e) {
+		cursor_.UpdatePos(*window_, cameraOffset_);
+
+		if (isPressed_) {
+			auto finish = cursor_.GetPosition();
+			sf::Vector2f offset{};
+			offset.x = startCamera_.x - finish.x;
+			offset.y = startCamera_.y - finish.y;
+			cameraOffset_ += offset;
+			
+			startCamera_ = cursor_.GetPosition();
+
+			cameraPosition_.setCenter(cameraOffset_);
+			window_->setView(cameraPosition_);
+		}
+		
+	}
+
+	
+
+	// keyboard funcs
+	void Window::KeyboardPressEvent(int key) {
+		switch (key) {
+		case sf::Keyboard::Left:
+			cameraOffset_.x -= cameraOffsetScale;
+			break;
+		case sf::Keyboard::Right:
+			cameraOffset_.x += cameraOffsetScale;
+			break;
+		case sf::Keyboard::Up:
+			cameraOffset_.y -= cameraOffsetScale;
+			break;
+		case sf::Keyboard::Down:
+			cameraOffset_.y += cameraOffsetScale;
+			break;
+		}
+		cameraPosition_.setCenter(cameraOffset_);
+		window_->setView(cameraPosition_);
+	}
 
 	// planets 
 	void Window::PlanetsInitialization() {
