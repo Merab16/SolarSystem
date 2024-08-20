@@ -35,6 +35,7 @@ namespace MyWindow {
 		cameraOffset_ = sf::Vector2f(General::WIDTH / 2, General::HEIGHT / 2);
 		cameraPosition_.setCenter(cameraOffset_);
 		cameraPosition_.setSize(General::WIDTH, General::HEIGHT);
+		cameraPosition_.zoom(cameraZoom_);
 
 
 		// window
@@ -82,7 +83,9 @@ namespace MyWindow {
 				MouseReleasedEvent(sfEvent);
 				break;
 
-
+			case sf::Event::MouseWheelScrolled:
+				MouseWheelEvent(sfEvent);
+				break;
 
 			}
 
@@ -154,8 +157,8 @@ namespace MyWindow {
 
 	void Window::UpdateMenuPosition() {
 		fps_.setPosition(sf::Vector2f{ 
-			(cameraOffset_.x - General::WIDTH / 2),
-			(cameraOffset_.y - General::HEIGHT / 2)
+			(cameraOffset_.x - cameraPosition_.getSize().x / 2),
+			(cameraOffset_.y - cameraPosition_.getSize().y / 2)
 		});
 
 		
@@ -182,7 +185,7 @@ namespace MyWindow {
 	}
 
 	void Window::MouseMoveEvent(const sf::Event& e) {
-		cursor_.UpdatePos(*window_, cameraOffset_);
+		cursor_.UpdatePos(*window_, cameraPosition_, cameraOffset_);
 
 		if (isPressed_) {
 			auto finish = cursor_.GetPosition();
@@ -199,6 +202,28 @@ namespace MyWindow {
 		
 	}
 
+	void Window::MouseWheelEvent(const sf::Event& e) {
+		if (e.mouseButton.button == sf::Mouse::Wheel::VerticalWheel) {
+			
+			if (e.mouseWheelScroll.delta > 0) {
+				cameraZoom_ -= 0.1;
+				
+			}
+			else {
+				cameraZoom_ += 0.1;
+			}
+			//fps_.setCharacterSize(16 * cameraZoom_);
+
+			cameraPosition_.zoom(cameraZoom_);
+			window_->setView(cameraPosition_);
+			cameraZoom_ = 1.f;
+			/*
+			std::cout << "wheel movement: " << e.mouseWheelScroll.delta << std::endl;
+			std::cout << "mouse x: " << e.mouseWheelScroll.x << std::endl;
+			std::cout << "mouse y: " << e.mouseWheelScroll.y << std::endl;
+			*/
+		}
+	}
 	
 
 	// keyboard funcs

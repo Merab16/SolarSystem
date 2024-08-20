@@ -32,6 +32,7 @@ namespace MyWindow {
 		sf::View cameraPosition_;
 		sf::Vector2f cameraOffset_;
 		float cameraOffsetScale = 2.f;
+		float cameraZoom_ = 1.f;
 		sf::Vector2f startCamera_{ 0.f, 0.f };
 		bool isPressed_ = false;
 
@@ -60,6 +61,7 @@ namespace MyWindow {
 		void MousePressEvent(const sf::Event& e);
 		void MouseReleasedEvent(const sf::Event& e);
 		void MouseMoveEvent(const sf::Event& e);
+		void MouseWheelEvent(const sf::Event& e);
 		
 
 		// keyboard func

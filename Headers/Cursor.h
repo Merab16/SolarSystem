@@ -17,7 +17,7 @@ namespace MyCursor {
 		Cursor();
 
 
-		void UpdatePos(const sf::RenderWindow& window, sf::Vector2f cameraOffset);
+		void UpdatePos(const sf::RenderWindow& window, const sf::View& camera, sf::Vector2f cameraOffset);
 		void Draw(sf::RenderWindow& window);
 		sf::Vector2f GetPosition() const { return static_cast<sf::Vector2f>(position_); };
 	};
