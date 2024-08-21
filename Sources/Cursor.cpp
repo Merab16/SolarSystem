@@ -26,19 +26,20 @@ namespace MyCursor {
 
 
 	// public
-	void Cursor::UpdatePos(const sf::RenderWindow& window, const sf::View& camera, sf::Vector2f cameraOffset) {
+	void Cursor::UpdatePos(const sf::RenderWindow& window, const sf::Vector2f& pos) {
 		position_ = sf::Mouse::getPosition(window); 
 		
-		std::string pos = std::to_string(position_.x) + ';' + std::to_string(position_.y);
-		text_.setString(pos);
-		text_.setPosition(sf::Vector2f{
-			 (cameraOffset.x - camera.getSize().x / 2 ),
-			 20 + (cameraOffset.y - camera.getSize().y / 2 )
-		});
+		std::string posText = std::to_string(position_.x) + ';' + std::to_string(position_.y);
+		text_.setString(posText);
+		text_.setPosition(sf::Vector2f{ pos.x, pos.y });
 	}
 
 	void Cursor::Draw(sf::RenderWindow& window) {
 		window.draw(text_);
+	}
+
+	void Cursor::SetScale(float scale) {
+		text_.setScale(scale, scale);
 	}
 
 }

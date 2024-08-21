@@ -31,17 +31,10 @@ namespace MyWindow {
 
 		// general
 	void Window::Initialization() {
-		
-		// camera
-		cameraOffset_ = sf::Vector2f(General::WIDTH / 2, General::HEIGHT / 2);
-		cameraPosition_.setCenter(cameraOffset_);
-		cameraPosition_.setSize(General::WIDTH, General::HEIGHT);
-		cameraPosition_.zoom(cameraZoom_);
-
 
 		// window
 		window_->setFramerateLimit(144);
-		window_->setView(cameraPosition_);
+		window_->setView(camera_.GetCamera());
 
 		// font && fps
 		font_.loadFromFile("Fonts/CascadiaCode.ttf");
@@ -161,12 +154,15 @@ namespace MyWindow {
 	}
 
 	void Window::UpdateMenuPosition() {
-		fps_.setPosition(sf::Vector2f{ 
-			(cameraOffset_.x - cameraPosition_.getSize().x / 2),
-			(cameraOffset_.y - cameraPosition_.getSize().y / 2)
-		});
-		cursor_.UpdatePos(*window_, cameraPosition_, cameraOffset_);
+		//window.mapPixelToCoords(static_cast<sf::Vector2i>(pos));
+		auto fpsPos = window_->mapPixelToCoords({ 0, 0 });
+		auto cursorPos = window_->mapPixelToCoords({ 0, 20 });
+		 
+		fps_.setPosition(sf::Vector2f{ fpsPos });
+		fps_.setScale(guiScale_, guiScale_);
 		
+		cursor_.UpdatePos(*window_, cursorPos);
+		cursor_.SetScale(guiScale_);
 		
 
 	}
@@ -175,19 +171,22 @@ namespace MyWindow {
 	void Window::MousePressEvent(const sf::Event& e) {
 		
 		if (e.mouseButton.button == sf::Mouse::Left) {
-			startCamera_ = cursor_.GetPosition();
+			camera_.Start(cursor_.GetPosition());
+
 			isPressed_ = true;
 
 
 			for (const auto& planet : planetsBehind_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
 					std::cout << planet->GetName() << std::endl;
-				}
+					//std::cout << planet->GetRadius() << std::endl;
+				} 
 			}
 
 			for (const auto& planet : planetsFrontOf_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
 					std::cout << planet->GetName() << std::endl;
+					//std::cout << planet->GetRadius() << std::endl;
 				}
 			}
 			
@@ -211,17 +210,14 @@ namespace MyWindow {
 
 		if (isPressed_) {
 			auto finish = cursor_.GetPosition();
-			sf::Vector2f offset{};
-			offset.x = startCamera_.x - finish.x;
-			offset.y = startCamera_.y - finish.y;
+			sf::Vector2f offset = camera_.Finish(finish); 
 			//std::cout << offset.x << ' ' << offset.y << std::endl;
 			if (std::abs(offset.x) > 5 || std::abs(offset.y) > 5) {
-				cameraOffset_ += offset;
+				camera_.GetOffset() += offset;
 
-				startCamera_ = cursor_.GetPosition();
-
-				cameraPosition_.setCenter(cameraOffset_);
-				window_->setView(cameraPosition_);
+				camera_.Start(cursor_.GetPosition());
+				camera_.SetCenter();
+				window_->setView(camera_.GetCamera());
 			}
 			
 		}
@@ -234,18 +230,17 @@ namespace MyWindow {
 		if (e.mouseButton.button == sf::Mouse::Wheel::VerticalWheel) {
 			
 			if (e.mouseWheelScroll.delta > 0) {
-				cameraZoom_ -= 0.1;
-				
+				camera_.GetZoom() -= 0.1;
+				guiScale_ *= (1 - 0.1);
 			}
 			else {
-				cameraZoom_ += 0.1;
-				
+				camera_.GetZoom() += 0.1;
+				guiScale_ *= (1 + 0.1);
 			}
-			
-			
-			cameraPosition_.zoom(cameraZoom_);
-			window_->setView(cameraPosition_);
-			cameraZoom_ = 1.f;
+			//fps_.setScale(camera_.GetZoom(), camera_.GetZoom());
+			camera_.SetZoom();
+			window_->setView(camera_.GetCamera());
+			camera_.GetZoom() = 1.f;
 			/*
 			std::cout << "wheel movement: " << e.mouseWheelScroll.delta << std::endl;
 			std::cout << "mouse x: " << e.mouseWheelScroll.x << std::endl;
@@ -257,22 +252,7 @@ namespace MyWindow {
 
 	// keyboard funcs
 	void Window::KeyboardPressEvent(int key) {
-		switch (key) {
-		case sf::Keyboard::Left:
-			cameraOffset_.x -= cameraOffsetScale;
-			break;
-		case sf::Keyboard::Right:
-			cameraOffset_.x += cameraOffsetScale;
-			break;
-		case sf::Keyboard::Up:
-			cameraOffset_.y -= cameraOffsetScale;
-			break;
-		case sf::Keyboard::Down:
-			cameraOffset_.y += cameraOffsetScale;
-			break;
-		}
-		cameraPosition_.setCenter(cameraOffset_);
-		window_->setView(cameraPosition_);
+
 	}
 
 	// planets 

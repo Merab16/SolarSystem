@@ -61,6 +61,7 @@ namespace SolarSystem {
 		float GetDistance() const { return distance_; }
 		bool IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const;
 		const std::string& GetName() const { return name_; }
+		float GetRadius() const { return radius_;  }
 	};
 
 	class Sun : public Planet {

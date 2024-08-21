@@ -8,6 +8,7 @@
 #include "GeometicPrimitive.h"
 #include "SolarSystem.h"
 #include "General.h"
+#include "Camera.h"
 
 
 namespace MyWindow {
@@ -29,11 +30,12 @@ namespace MyWindow {
 		std::vector< SolarSystem::Planet*> planetsFrontOf_;
 
 		// camera
-		sf::View cameraPosition_;
-		sf::Vector2f cameraOffset_;
-		float cameraOffsetScale = 2.f;
-		float cameraZoom_ = 1.f;
-		sf::Vector2f startCamera_{ 0.f, 0.f };
+		Camera::Camera camera_;
+		//sf::View cameraPosition_;
+		//sf::Vector2f cameraOffset_;
+		//float cameraOffsetScale = 2.f;
+		//float cameraZoom_ = 1.f;
+		//sf::Vector2f startCamera_{ 0.f, 0.f };
 		bool isPressed_ = false;
 
 		// fps
@@ -41,8 +43,12 @@ namespace MyWindow {
 		float dt_;
 		sf::Text fps_;
 		
+		
 		// font
 		sf::Font font_;
+
+		// gui
+		float guiScale_ = 1.f;
 
 
 	private:
