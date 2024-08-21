@@ -28,6 +28,7 @@ namespace MyCursor {
 	// public
 	void Cursor::UpdatePos(const sf::RenderWindow& window, const sf::View& camera, sf::Vector2f cameraOffset) {
 		position_ = sf::Mouse::getPosition(window); 
+		
 		std::string pos = std::to_string(position_.x) + ';' + std::to_string(position_.y);
 		text_.setString(pos);
 		text_.setPosition(sf::Vector2f{

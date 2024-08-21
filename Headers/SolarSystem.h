@@ -54,12 +54,13 @@ namespace SolarSystem {
 		Planet(const std::string& name, float distance, float period,
 			float diametr, float weight, float velocity);
 		void Draw(sf::RenderWindow& window) const;
+		void DrawEllipse(sf::RenderWindow& window) const;
 		virtual void UpdatePosition(float dt);
 
 		float GetAngle() const { return angle_ - offsetAngle_; }
 		float GetDistance() const { return distance_; }
-			
-
+		bool IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const;
+		const std::string& GetName() const { return name_; }
 	};
 
 	class Sun : public Planet {

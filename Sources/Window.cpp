@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 
 #include "../Headers/Window.h"
@@ -58,6 +59,10 @@ namespace MyWindow {
 
 		UpdateDepth();
 		PlanetsUpdate();
+
+		//std::cout << cameraPosition_.getCenter().x << ' ' 
+			//<< cameraPosition_.getCenter().y << std::endl;
+		
 	}
 
 	void Window::UpdateSFMLEvents() {
@@ -160,45 +165,68 @@ namespace MyWindow {
 			(cameraOffset_.x - cameraPosition_.getSize().x / 2),
 			(cameraOffset_.y - cameraPosition_.getSize().y / 2)
 		});
-
+		cursor_.UpdatePos(*window_, cameraPosition_, cameraOffset_);
 		
+		
+
 	}
 
 	// mouse funcs
 	void Window::MousePressEvent(const sf::Event& e) {
-		if (e.type == sf::Event::MouseButtonPressed) {
-			if (e.mouseButton.button == sf::Mouse::Left) {
-				startCamera_ = cursor_.GetPosition();
-				isPressed_ = true;
+		
+		if (e.mouseButton.button == sf::Mouse::Left) {
+			startCamera_ = cursor_.GetPosition();
+			isPressed_ = true;
+
+
+			for (const auto& planet : planetsBehind_) {
+				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
+					std::cout << planet->GetName() << std::endl;
+				}
 			}
+
+			for (const auto& planet : planetsFrontOf_) {
+				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
+					std::cout << planet->GetName() << std::endl;
+				}
+			}
+			
+
 		}
+		
 
 	}
 
 	void Window::MouseReleasedEvent(const sf::Event& e) {
-		if (e.type == sf::Event::MouseButtonReleased) {
-			if (e.mouseButton.button == sf::Mouse::Left) {
-				isPressed_ = false;
+		
+		if (e.mouseButton.button == sf::Mouse::Left) {
+			isPressed_ = false;
 
-			}
 		}
+		
 	}
 
 	void Window::MouseMoveEvent(const sf::Event& e) {
-		cursor_.UpdatePos(*window_, cameraPosition_, cameraOffset_);
+		
 
 		if (isPressed_) {
 			auto finish = cursor_.GetPosition();
 			sf::Vector2f offset{};
 			offset.x = startCamera_.x - finish.x;
 			offset.y = startCamera_.y - finish.y;
-			cameraOffset_ += offset;
-			
-			startCamera_ = cursor_.GetPosition();
+			//std::cout << offset.x << ' ' << offset.y << std::endl;
+			if (std::abs(offset.x) > 5 || std::abs(offset.y) > 5) {
+				cameraOffset_ += offset;
 
-			cameraPosition_.setCenter(cameraOffset_);
-			window_->setView(cameraPosition_);
+				startCamera_ = cursor_.GetPosition();
+
+				cameraPosition_.setCenter(cameraOffset_);
+				window_->setView(cameraPosition_);
+			}
+			
 		}
+
+		
 		
 	}
 
@@ -211,9 +239,10 @@ namespace MyWindow {
 			}
 			else {
 				cameraZoom_ += 0.1;
+				
 			}
-			//fps_.setCharacterSize(16 * cameraZoom_);
-
+			
+			
 			cameraPosition_.zoom(cameraZoom_);
 			window_->setView(cameraPosition_);
 			cameraZoom_ = 1.f;
@@ -285,6 +314,15 @@ namespace MyWindow {
 	}
 
 	void Window::PlanetsDraw() const {
+
+		for (const auto& planet : planetsBehind_) {
+			planet->DrawEllipse(*window_);
+		}
+
+		for (const auto& planet : planetsFrontOf_) {
+			planet->DrawEllipse(*window_);
+		}
+
 
 		for (const auto& planet : planetsBehind_) {
 			planet->Draw(*window_);

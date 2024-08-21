@@ -59,6 +59,17 @@ namespace SolarSystem {
 		circle_->setPointCount(50);
 		circle_->setFillColor(RandomColor());
 
+		ellipse_->setRadius(1.4 * ellipseA_);
+		ellipse_->setScale({ 1.f, 0.5f });
+		ellipse_->setFillColor(sf::Color::Transparent);
+		ellipse_->setOutlineThickness(0.1);
+		ellipse_->setOutlineColor(sf::Color::Red);
+		ellipse_->setPointCount(50);
+		ellipse_->setPosition(
+			General::WIDTH / 2 - ellipse_->getRadius(),
+			General::HEIGHT / 2 - ellipse_->getRadius() / 2
+		);
+
 	}
 
 	sf::Vector2f Planet::GetCenter(float w, float h, const sf::CircleShape& shape) {
@@ -83,7 +94,20 @@ namespace SolarSystem {
 	void Planet::Draw(sf::RenderWindow& window) const {
 		//window.draw(*ellipse_);
 		window.draw(*circle_);
+
+		sf::RectangleShape rect;
+		rect.setSize(circle_->getGlobalBounds().getSize());
+		rect.setPosition(circle_->getGlobalBounds().getPosition());
+		rect.setFillColor(sf::Color::Transparent);
+		rect.setOutlineColor(sf::Color::White);
+		rect.setOutlineThickness(1);
+
+		//window.draw(rect);
 		
+	}
+
+	void Planet::DrawEllipse(sf::RenderWindow& window) const {
+		window.draw(*ellipse_);
 	}
 
 	void Planet::UpdatePosition(float dt) {
@@ -100,7 +124,7 @@ namespace SolarSystem {
 		angle_ += (velocity_) * dt;
 		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
-		auto delta = 0.00005 * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
+		auto delta = 0.00008 * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
 		//std::cout << angle_ - offsetAngle_ << std::endl;
 
 		if (angle_  > 270 + offsetAngle_ || angle_ <= 90 + offsetAngle_) {
@@ -116,6 +140,16 @@ namespace SolarSystem {
 		
 	}
 	
+	bool Planet::IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const {
+		//sf::Transform tr = camera.getTransform();
+		
+		/*auto rect = camera.getViewport();
+		auto x = camera.getCenter().x - camera.getSize().x / 2;
+		auto y = camera.getCenter().y - camera.getSize().y / 2;
+		std::cout << pos.x + rect.left << ' ' << pos.y + rect.top << std::endl;*/
+		auto worldPos = window.mapPixelToCoords(static_cast<sf::Vector2i>(pos));
+		return circle_->getGlobalBounds().contains(worldPos);
+	}
 
 	//===SUN===//
 
