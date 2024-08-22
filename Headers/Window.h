@@ -38,10 +38,6 @@ namespace MyWindow {
 		sf::Clock dtClock_;
 		float dt_;
 		sf::Text fps_;
-		
-		
-		// font
-		sf::Font font_;
 
 		// gui
 		std::unique_ptr<GUI::Interface> interface_;
@@ -73,6 +69,9 @@ namespace MyWindow {
 		void PlanetsInitialization();
 		void PlanetsUpdate();
 		void PlanetsDraw() const;
+
+		// convert current pos to global
+		sf::Vector2f CurrentToGlobalPos(const sf::Vector2f& pos) const;
 
 	public:
 		Window(unsigned width = General::WIDTH, unsigned height = General::HEIGHT,

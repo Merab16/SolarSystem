@@ -1,11 +1,15 @@
 #pragma once
+#include <string>
+
 
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
 
 namespace General {
 	constexpr float	WIDTH = 1600;
 	constexpr float	HEIGHT = 900;
-
 	
 	struct PlanetInfo {
 		std::string name;
@@ -32,6 +36,17 @@ namespace General {
 		{"Neptune", 30.07f * distanceScale,	167.8f * ONE_YEAR,	4.86f * diametrScale,	10.3f,	5.4f}
 	};
 
+	// Fonts
+	class Fonts {
+	public:
+		static sf::Font MAIN_FONT;
+		static void Initialization();
+		
+	};
+
+	
+
 
 }
+
 

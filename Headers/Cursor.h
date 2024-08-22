@@ -8,7 +8,6 @@ namespace MyCursor {
 	private:
 		sf::Vector2i position_;
 		sf::Text text_;
-		sf::Font font_;
 
 	private:
 		void Initialization();

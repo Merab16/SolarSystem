@@ -32,14 +32,16 @@ namespace MyWindow {
 
 		// general
 	void Window::Initialization() {
+		// init fonts
+		General::Fonts::Initialization();
+
 
 		// window
 		window_->setFramerateLimit(144);
 		window_->setView(camera_.GetCamera());
 
 		// font && fps
-		font_.loadFromFile("Fonts/CascadiaCode.ttf");
-		fps_.setFont(font_);
+		fps_.setFont(General::Fonts::MAIN_FONT);
 		fps_.setCharacterSize(16);
 
 
@@ -54,11 +56,11 @@ namespace MyWindow {
 		
 		UpdateMenuPosition();
 
+		interface_->Update(*window_);
+
+
 		UpdateDepth();
 		PlanetsUpdate();
-
-		//std::cout << cameraPosition_.getCenter().x << ' ' 
-			//<< cameraPosition_.getCenter().y << std::endl;
 		
 	}
 
@@ -157,17 +159,16 @@ namespace MyWindow {
 	}
 
 	void Window::UpdateMenuPosition() {
-		//window.mapPixelToCoords(static_cast<sf::Vector2i>(pos));
 		// fps
-		auto fpsPos = window_->mapPixelToCoords({ 0, 0 });
+		auto fpsPos = CurrentToGlobalPos({ 0, 0 });
 		fps_.setPosition(sf::Vector2f{ fpsPos });
 
 		// cursor
-		auto cursorPos = window_->mapPixelToCoords({ 0, 20 });
+		auto cursorPos = CurrentToGlobalPos({ 0, 20 });
 		cursor_.UpdatePos(*window_, cursorPos);
 		
 		
-		interface_->Update();
+		
 	}
 
 	// mouse funcs
@@ -225,7 +226,7 @@ namespace MyWindow {
 			
 		}
 
-		
+		interface_->IsHover(CurrentToGlobalPos(cursor_.GetPosition()));
 		
 	}
 
@@ -321,6 +322,11 @@ namespace MyWindow {
 
 		
 	}
+
+	sf::Vector2f Window::CurrentToGlobalPos(const sf::Vector2f& pos) const {
+		return window_->mapPixelToCoords(static_cast<sf::Vector2i>(pos));
+	}
+
 
 	// public
 	void Window::Run() {

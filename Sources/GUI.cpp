@@ -10,23 +10,29 @@ namespace GUI {
 		, fps_(fps)
 		, cursorPos_(cursor)
 	{
-		font_.loadFromFile("Fonts/CascadiaCode.ttf");
 
 	}
 
 
 	// public
 	void Interface::Draw(sf::RenderWindow& window) {
+		mainMenu_.Draw(window);
+
 		window.draw(fps_);
 		window.draw(cursorPos_);
+
 	}
 
-	void Interface::Update() {
+	void Interface::Update(const sf::RenderWindow& window) {
 		fps_.setScale(guiScale_, guiScale_);
 		cursorPos_.setScale(guiScale_, guiScale_);
 		
+		mainMenu_.Update(window, guiScale_);
 	}
 
+	void Interface::IsHover(const sf::Vector2f& pos) {
+		mainMenu_.IsHover(pos);
+	}
 
 
 }
