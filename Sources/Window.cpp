@@ -11,7 +11,8 @@ namespace MyWindow {
 		: width_(width)
 		, height_(height)
 		, settings_(0, 0, 8)
-		, window_(new sf::RenderWindow(sf::VideoMode(width_, height_), wnd_name, sf::Style::Default, settings_))
+		, window_(new sf::RenderWindow(sf::VideoMode(width_, height_),
+			wnd_name, sf::Style::Default, settings_))
 	{
 		Initialization();
 		PlanetsInitialization();
@@ -40,6 +41,9 @@ namespace MyWindow {
 		font_.loadFromFile("Fonts/CascadiaCode.ttf");
 		fps_.setFont(font_);
 		fps_.setCharacterSize(16);
+
+
+		interface_ = std::make_unique<GUI::Interface>(fps_, cursor_.GetText());
 		
 	}
 
@@ -148,23 +152,22 @@ namespace MyWindow {
 		
 		PlanetsDraw();
 
+		interface_->Draw(*window_);
 
-		cursor_.Draw(*window_);
-		window_->draw(fps_);
 	}
 
 	void Window::UpdateMenuPosition() {
 		//window.mapPixelToCoords(static_cast<sf::Vector2i>(pos));
+		// fps
 		auto fpsPos = window_->mapPixelToCoords({ 0, 0 });
-		auto cursorPos = window_->mapPixelToCoords({ 0, 20 });
-		 
 		fps_.setPosition(sf::Vector2f{ fpsPos });
-		fps_.setScale(guiScale_, guiScale_);
-		
-		cursor_.UpdatePos(*window_, cursorPos);
-		cursor_.SetScale(guiScale_);
-		
 
+		// cursor
+		auto cursorPos = window_->mapPixelToCoords({ 0, 20 });
+		cursor_.UpdatePos(*window_, cursorPos);
+		
+		
+		interface_->Update();
 	}
 
 	// mouse funcs
@@ -231,11 +234,11 @@ namespace MyWindow {
 			
 			if (e.mouseWheelScroll.delta > 0) {
 				camera_.GetZoom() -= 0.1;
-				guiScale_ *= (1 - 0.1);
+				interface_->GetScale() *= (1 - 0.1);
 			}
 			else {
 				camera_.GetZoom() += 0.1;
-				guiScale_ *= (1 + 0.1);
+				interface_->GetScale() *= (1 + 0.1);
 			}
 			//fps_.setScale(camera_.GetZoom(), camera_.GetZoom());
 			camera_.SetZoom();

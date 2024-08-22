@@ -18,10 +18,10 @@ namespace MyCursor {
 
 
 		void UpdatePos(const sf::RenderWindow& window, const sf::Vector2f& pos);
-		void Draw(sf::RenderWindow& window);
 		void SetScale(float scale);
 
 		// getters
 		sf::Vector2f GetPosition() const { return static_cast<sf::Vector2f>(position_); };
+		sf::Text& GetText() { return text_; }
 	};
 }

@@ -34,10 +34,6 @@ namespace MyCursor {
 		text_.setPosition(sf::Vector2f{ pos.x, pos.y });
 	}
 
-	void Cursor::Draw(sf::RenderWindow& window) {
-		window.draw(text_);
-	}
-
 	void Cursor::SetScale(float scale) {
 		text_.setScale(scale, scale);
 	}

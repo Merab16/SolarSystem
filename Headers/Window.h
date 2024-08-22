@@ -9,6 +9,7 @@
 #include "SolarSystem.h"
 #include "General.h"
 #include "Camera.h"
+#include "GUI.h"
 
 
 namespace MyWindow {
@@ -31,11 +32,6 @@ namespace MyWindow {
 
 		// camera
 		Camera::Camera camera_;
-		//sf::View cameraPosition_;
-		//sf::Vector2f cameraOffset_;
-		//float cameraOffsetScale = 2.f;
-		//float cameraZoom_ = 1.f;
-		//sf::Vector2f startCamera_{ 0.f, 0.f };
 		bool isPressed_ = false;
 
 		// fps
@@ -48,7 +44,7 @@ namespace MyWindow {
 		sf::Font font_;
 
 		// gui
-		float guiScale_ = 1.f;
+		std::unique_ptr<GUI::Interface> interface_;
 
 
 	private:
