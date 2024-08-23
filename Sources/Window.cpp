@@ -214,7 +214,9 @@ namespace MyWindow {
 
 		if (isPressed_) {
 			auto finish = cursor_.GetPosition();
-			sf::Vector2f offset = camera_.Finish(finish); 
+			sf::Vector2f offset = camera_.Finish(finish);
+			offset.x *= interface_->GetScale();
+			offset.y *= interface_->GetScale();
 			//std::cout << offset.x << ' ' << offset.y << std::endl;
 			if (std::abs(offset.x) > 5 || std::abs(offset.y) > 5) {
 				camera_.GetOffset() += offset;
