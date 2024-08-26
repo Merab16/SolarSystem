@@ -23,6 +23,9 @@ namespace General {
 	static float distanceScale = 10;
 	static float diametrScale = 5;
 	const float ONE_YEAR = 365.24f;
+	static size_t SPRITE_SIZE = 500;
+	//static float PERIOD_SCALE = 0.055;
+	static float PERIOD_SCALE = 20;
 
 	static std::vector<PlanetInfo> planetsInfo = {
 	//	  name		dist					period			         D					weight	vel

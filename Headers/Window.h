@@ -27,8 +27,13 @@ namespace MyWindow {
 
 		// planets
 		SolarSystem::Sun* sun_;
-		std::vector< SolarSystem::Planet*> planetsBehind_;
-		std::vector< SolarSystem::Planet*> planetsFrontOf_;
+		std::vector<SolarSystem::Planet*> planetsBehind_;
+		std::vector<SolarSystem::Planet*> planetsFrontOf_;
+
+		// background
+		std::unique_ptr<sf::Texture> textureBackground_;
+		std::unique_ptr<sf::Sprite> spriteBackground_;
+
 
 		// camera
 		Camera::Camera camera_;
@@ -42,6 +47,8 @@ namespace MyWindow {
 		// gui
 		std::unique_ptr<GUI::Interface> interface_;
 
+
+		
 
 	private:
 		// general

@@ -51,6 +51,20 @@ namespace Navigation {
 
 	};
 
+	class BarMenu {
+		// меню где будут настройки с ползунками: 
+		// 1. ускорение/замедление времени 
+		// 2. 
+	private:
+
+
+	private:
+
+
+	public:
+
+
+	};
 
 
 }

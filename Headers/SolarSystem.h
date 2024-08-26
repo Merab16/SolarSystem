@@ -8,6 +8,7 @@ namespace SolarSystem {
 
 	class Planet {
 	private:
+
 		// data
 		std::string name_;
 		float distance_;
@@ -19,16 +20,16 @@ namespace SolarSystem {
 		// scales
 		float distanceScale_ = 100;
 
+		// sprite rotation
+		size_t spriteCounter_ = 0;
+
 
 
 		float ellipseA_, ellipseB_;
 
 		float angle_ = 0.f;
-		//float radius_;
 		float max_radius_;
 		float min_radius_;
-		//float distance_;
-		//float velocity_ = 0.1f;
 		float offsetAngle_;
 
 		sf::Color color_;
@@ -56,7 +57,9 @@ namespace SolarSystem {
 		void Draw(sf::RenderWindow& window) const;
 		void DrawEllipse(sf::RenderWindow& window) const;
 		virtual void UpdatePosition(float dt);
+		void UpdateSprite();
 
+		// getters
 		float GetAngle() const { return angle_ - offsetAngle_; }
 		float GetDistance() const { return distance_; }
 		bool IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const;

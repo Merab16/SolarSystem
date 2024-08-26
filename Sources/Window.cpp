@@ -37,8 +37,16 @@ namespace MyWindow {
 
 
 		// window
-		window_->setFramerateLimit(144);
+		window_->setFramerateLimit(120);
 		window_->setView(camera_.GetCamera());
+
+		// background
+		textureBackground_ = std::make_unique<sf::Texture>();
+		spriteBackground_ = std::make_unique<sf::Sprite>();
+
+		textureBackground_->loadFromFile("Images/Background.png");
+		spriteBackground_->setTexture(*textureBackground_);
+		spriteBackground_->setScale(0.7, 0.5);
 
 		// font && fps
 		fps_.setFont(General::Fonts::MAIN_FONT);
@@ -152,6 +160,8 @@ namespace MyWindow {
 
 	void Window::Draw() {
 		
+		window_->draw(*spriteBackground_);
+
 		PlanetsDraw();
 
 		interface_->Draw(*window_);
@@ -166,8 +176,11 @@ namespace MyWindow {
 		// cursor
 		auto cursorPos = CurrentToGlobalPos({ 0, 20 });
 		cursor_.UpdatePos(*window_, cursorPos);
+
 		
-		
+		auto backgroundPos = CurrentToGlobalPos({0, 0});
+		spriteBackground_->setPosition(backgroundPos);
+		spriteBackground_->setScale(interface_->GetScale(), interface_->GetScale());
 		
 	}
 
@@ -301,13 +314,13 @@ namespace MyWindow {
 
 	void Window::PlanetsDraw() const {
 
-		for (const auto& planet : planetsBehind_) {
+		/*for (const auto& planet : planetsBehind_) {
 			planet->DrawEllipse(*window_);
 		}
 
 		for (const auto& planet : planetsFrontOf_) {
 			planet->DrawEllipse(*window_);
-		}
+		}*/
 
 
 		for (const auto& planet : planetsBehind_) {

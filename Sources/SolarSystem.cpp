@@ -37,7 +37,6 @@ namespace SolarSystem {
 
 		angle_ = 45; 
 		offsetAngle_ = 45;
-		//RadToAngle(atan(ellipseB_ / ellipseA_));
 	}
 
 
@@ -50,6 +49,19 @@ namespace SolarSystem {
 		texture_ = std::make_unique<sf::Texture>();
 		image_ = std::make_unique<sf::Image>();
 		ellipse_ = std::make_unique<sf::CircleShape>();
+
+		// texture 
+		if (!texture_->loadFromFile("Images/" + name_ + ".png")) {
+			std::cout << name_ + ".png can not find!" << std::endl;
+		}
+		texture_->setSmooth(true);
+
+		// sprite
+		sprite_->setTexture(*texture_);
+		sprite_->setTextureRect(sf::IntRect(0, 0, General::SPRITE_SIZE, General::SPRITE_SIZE));
+		sprite_->setScale(radius_ * 2 / General::SPRITE_SIZE, radius_ * 2 / General::SPRITE_SIZE);	
+
+
 
 		max_radius_ = radius_;
 		min_radius_ = 0.1 * radius_;
@@ -93,7 +105,8 @@ namespace SolarSystem {
 	// public
 	void Planet::Draw(sf::RenderWindow& window) const {
 		//window.draw(*ellipse_);
-		window.draw(*circle_);
+		//window.draw(*circle_);
+		window.draw(*sprite_);
 
 		sf::RectangleShape rect;
 		rect.setSize(circle_->getGlobalBounds().getSize());
@@ -114,9 +127,12 @@ namespace SolarSystem {
 
 		
 		auto offset = GetCenter(General::WIDTH / 2, General::HEIGHT / 2, *circle_);
-		
 		// changing position via ellipse
 		circle_->setPosition(
+			offset.x + ((ellipseA_) * cos(AngleToRad(angle_)) + (ellipseA_) * sin(AngleToRad(angle_))),
+			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
+		);
+		sprite_->setPosition(
 			offset.x + ((ellipseA_) * cos(AngleToRad(angle_)) + (ellipseA_) * sin(AngleToRad(angle_))),
 			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
 		);
@@ -137,9 +153,23 @@ namespace SolarSystem {
 		}
 		 
 		circle_->setRadius(radius_);
+
 		
+		UpdateSprite();
 	}
 	
+	void Planet::UpdateSprite() {
+		sprite_->setTextureRect(sf::IntRect(
+			(spriteCounter_ / int(General::PERIOD_SCALE) % 30) * General::SPRITE_SIZE,
+			(spriteCounter_ / int(General::PERIOD_SCALE) / 30) * General::SPRITE_SIZE,
+			General::SPRITE_SIZE, General::SPRITE_SIZE));
+
+		spriteCounter_++;
+		if (spriteCounter_ == 60 * int(General::PERIOD_SCALE)) spriteCounter_ = 0;
+	}
+
+
+	// getters
 	bool Planet::IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const {
 		//sf::Transform tr = camera.getTransform();
 		
@@ -165,7 +195,7 @@ namespace SolarSystem {
 	void Sun::UpdatePosition(float dt) {
 		auto offset = GetCenter(General::WIDTH / 2, General::HEIGHT / 2, *circle_);
 		circle_->setPosition(offset.x, offset.y);
-		
+		sprite_->setPosition(offset);
 	}
 
 	// public
