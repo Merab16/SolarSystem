@@ -6,6 +6,7 @@
 
 #include "../Headers/Window.h"
 namespace MyWindow {
+	using namespace General;
 	// constr & destr
 	Window::Window(unsigned width, unsigned height, std::string wnd_name)
 		: width_(width)
@@ -46,10 +47,10 @@ namespace MyWindow {
 
 		textureBackground_->loadFromFile("Images/Background.png");
 		spriteBackground_->setTexture(*textureBackground_);
-		spriteBackground_->setScale(0.7, 0.5);
+		spriteBackground_->setScale(0.7f, 0.5f);
 
 		// font && fps
-		fps_.setFont(General::Fonts::MAIN_FONT);
+		fps_.setFont(General::Fonts::MAIN);
 		fps_.setCharacterSize(16);
 
 
@@ -170,15 +171,15 @@ namespace MyWindow {
 
 	void Window::UpdateMenuPosition() {
 		// fps
-		auto fpsPos = CurrentToGlobalPos({ 0, 0 });
+		auto fpsPos = CurrentToGlobalPos(*window_, { 0, 0 });
 		fps_.setPosition(sf::Vector2f{ fpsPos });
 
 		// cursor
-		auto cursorPos = CurrentToGlobalPos({ 0, 20 });
+		auto cursorPos = CurrentToGlobalPos(*window_, { 0, 20 });
 		cursor_.UpdatePos(*window_, cursorPos);
 
 		
-		auto backgroundPos = CurrentToGlobalPos({0, 0});
+		auto backgroundPos = CurrentToGlobalPos(*window_, {0, 0});
 		spriteBackground_->setPosition(backgroundPos);
 		spriteBackground_->setScale(interface_->GetScale(), interface_->GetScale());
 		
@@ -189,24 +190,23 @@ namespace MyWindow {
 		
 		if (e.mouseButton.button == sf::Mouse::Left) {
 			camera_.Start(cursor_.GetPosition());
-
 			isPressed_ = true;
-
 
 			for (const auto& planet : planetsBehind_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
 					std::cout << planet->GetName() << std::endl;
-					//std::cout << planet->GetRadius() << std::endl;
+					interface_->SetName(planet->GetName());
 				} 
 			}
 
 			for (const auto& planet : planetsFrontOf_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
 					std::cout << planet->GetName() << std::endl;
-					//std::cout << planet->GetRadius() << std::endl;
+					interface_->SetName(planet->GetName());
 				}
 			}
 			
+			interface_->IsClicked(*window_, CurrentToGlobalPos(*window_, cursor_.GetPosition()));
 
 		}
 		
@@ -241,7 +241,7 @@ namespace MyWindow {
 			
 		}
 
-		interface_->IsHover(CurrentToGlobalPos(cursor_.GetPosition()));
+		interface_->IsHover(CurrentToGlobalPos(*window_, cursor_.GetPosition()));
 		
 	}
 
@@ -249,12 +249,12 @@ namespace MyWindow {
 		if (e.mouseButton.button == sf::Mouse::Wheel::VerticalWheel) {
 			
 			if (e.mouseWheelScroll.delta > 0) {
-				camera_.GetZoom() -= 0.1;
-				interface_->GetScale() *= (1 - 0.1);
+				camera_.GetZoom() -= 0.1f;
+				interface_->GetScale() *= (1 - 0.1f);
 			}
 			else {
-				camera_.GetZoom() += 0.1;
-				interface_->GetScale() *= (1 + 0.1);
+				camera_.GetZoom() += 0.1f;
+				interface_->GetScale() *= (1 + 0.1f);
 			}
 			//fps_.setScale(camera_.GetZoom(), camera_.GetZoom());
 			camera_.SetZoom();
@@ -336,10 +336,6 @@ namespace MyWindow {
 		}
 
 		
-	}
-
-	sf::Vector2f Window::CurrentToGlobalPos(const sf::Vector2f& pos) const {
-		return window_->mapPixelToCoords(static_cast<sf::Vector2i>(pos));
 	}
 
 

@@ -58,23 +58,23 @@ namespace SolarSystem {
 
 		// sprite
 		sprite_->setTexture(*texture_);
-		sprite_->setTextureRect(sf::IntRect(0, 0, General::SPRITE_SIZE, General::SPRITE_SIZE));
-		sprite_->setScale(radius_ * 2 / General::SPRITE_SIZE, radius_ * 2 / General::SPRITE_SIZE);	
+		sprite_->setTextureRect(sf::IntRect(0, 0, (int)General::SPRITE_SIZE, (int)General::SPRITE_SIZE));
+		sprite_->setScale(radius_ * 2 / (int)General::SPRITE_SIZE, radius_ * 2 / (int)General::SPRITE_SIZE);
 
 
 
 		max_radius_ = radius_;
-		min_radius_ = 0.1 * radius_;
+		min_radius_ = 0.1f * radius_;
 
 
 		circle_->setRadius(radius_);
 		circle_->setPointCount(50);
 		circle_->setFillColor(RandomColor());
 
-		ellipse_->setRadius(1.4 * ellipseA_);
+		ellipse_->setRadius(1.4f * ellipseA_);
 		ellipse_->setScale({ 1.f, 0.5f });
 		ellipse_->setFillColor(sf::Color::Transparent);
-		ellipse_->setOutlineThickness(0.1);
+		ellipse_->setOutlineThickness(0.1f);
 		ellipse_->setOutlineColor(sf::Color::Red);
 		ellipse_->setPointCount(50);
 		ellipse_->setPosition(
@@ -89,11 +89,11 @@ namespace SolarSystem {
 	}
 
 	float Planet::AngleToRad(float angle) {
-		return 3.14159 / 180 * angle;
+		return 3.14159f / 180 * angle;
 	}
 
 	float Planet::RadToAngle(float rad) {
-		return rad * 180 / 3.14159;
+		return rad * 180 / 3.14159f;
 	}
 
 	sf::Color Planet::RandomColor() const {
@@ -140,7 +140,7 @@ namespace SolarSystem {
 		angle_ += (velocity_) * dt;
 		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
-		auto delta = 0.00008 * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
+		float delta = 0.00008f * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
 		//std::cout << angle_ - offsetAngle_ << std::endl;
 
 		if (angle_  > 270 + offsetAngle_ || angle_ <= 90 + offsetAngle_) {
@@ -160,9 +160,9 @@ namespace SolarSystem {
 	
 	void Planet::UpdateSprite() {
 		sprite_->setTextureRect(sf::IntRect(
-			(spriteCounter_ / int(General::PERIOD_SCALE) % 30) * General::SPRITE_SIZE,
-			(spriteCounter_ / int(General::PERIOD_SCALE) / 30) * General::SPRITE_SIZE,
-			General::SPRITE_SIZE, General::SPRITE_SIZE));
+			((int)spriteCounter_ / int(General::PERIOD_SCALE) % 30) * (int)General::SPRITE_SIZE,
+			((int)spriteCounter_ / int(General::PERIOD_SCALE) / 30) * (int)General::SPRITE_SIZE,
+			(int)General::SPRITE_SIZE, (int)General::SPRITE_SIZE));
 
 		spriteCounter_++;
 		if (spriteCounter_ == 60 * int(General::PERIOD_SCALE)) spriteCounter_ = 0;

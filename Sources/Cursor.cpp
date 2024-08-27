@@ -12,7 +12,7 @@ namespace MyCursor {
 
 	// private
 	void Cursor::Initialization() {
-		text_.setFont(General::Fonts::MAIN_FONT);
+		text_.setFont(General::Fonts::MAIN);
 		text_.setCharacterSize(16);
 		text_.setFillColor(sf::Color{ 90, 160, 190 });
 

@@ -2,14 +2,34 @@
 
 namespace GeometricPrimitive {
 
+	//================= FillRectangle =================//
+
 	// constr && destr
-	Rectangle::Rectangle(sf::Vector2f size, sf::Vector2f pos, sf::Color color)
+	FillRectangle::FillRectangle(sf::Vector2f size, sf::Vector2f pos, sf::Color color)
 	: sf::RectangleShape(size)
 	{
 		setPosition(pos);
 		setFillColor(color);
+	}
+
+	FillRectangle::~FillRectangle() {
+
+	}
+
+	// private
+
+	// public
+
+
+	//================= Rectangle =================//
+	// constr && destr
+	Rectangle::Rectangle(sf::Vector2f size, sf::Vector2f pos, sf::Color color)
+		: sf::RectangleShape(size)
+	{
+		setPosition(pos);
+		setFillColor(sf::Color::Transparent);
 		setOutlineThickness(1.f);
-		setOutlineColor(sf::Color(255, 255, 255));
+		setOutlineColor(color);
 	}
 
 	Rectangle::~Rectangle() {
@@ -19,7 +39,8 @@ namespace GeometricPrimitive {
 	// private
 
 	// public
-
-
-
+	void Rectangle::Update(const sf::Vector2f& pos, float scale) {
+		setPosition(pos);
+		setScale(scale, scale);
+	}
 }

@@ -5,8 +5,10 @@ namespace Navigation {
 
 	//================= MenuButton =================//
 	// MenuButton
-	MenuButton::MenuButton(const std::string& name) {
-		text_.setFont(General::Fonts::MAIN_FONT);
+	MenuButton::MenuButton(const std::string& name, BUTTON_ID id)
+		: id_(id)
+	{
+		text_.setFont(General::Fonts::MAIN);
 		text_.setString(name);
 		text_.setCharacterSize(24);
 		text_.setFillColor(sf::Color::White);
@@ -36,7 +38,11 @@ namespace Navigation {
 		}
 	}
 
-
+	BUTTON_ID MenuButton::IsClicked(const sf::Vector2f& pos) const {
+		if (text_.getGlobalBounds().contains(pos))
+			return id_;
+		return BUTTON_ID::NONE;
+	}
 
 
 
@@ -54,9 +60,9 @@ namespace Navigation {
 	// private
 	void MainMenu::Initialization() {
 		buttons_ = {
-			MenuButton("Start / Stop"),
-			MenuButton("Settings"),
-			MenuButton("Exit")
+			MenuButton("Start / Stop", BUTTON_ID::START),
+			MenuButton("Settings", BUTTON_ID::SETTINGS),
+			MenuButton("Exit", BUTTON_ID::EXIT)
 		};
 	}
 
@@ -92,6 +98,21 @@ namespace Navigation {
 		}
 	}
 
+	void MainMenu::IsClicked(sf::RenderWindow& window, const sf::Vector2f& pos) const {
+		for (const auto& btn : buttons_) {
+			switch (btn.IsClicked(pos)) {
+			case BUTTON_ID::START:
+
+				break;
+			case BUTTON_ID::SETTINGS:
+
+				break;
+			case BUTTON_ID::EXIT:
+				window.close();
+				break;
+			}
+		}
+	}
 
 }
 

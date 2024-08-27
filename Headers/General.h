@@ -42,11 +42,16 @@ namespace General {
 	// Fonts
 	class Fonts {
 	public:
-		static sf::Font MAIN_FONT;
+		static sf::Font MAIN;
+		static sf::Font DEFAULT;
 		static void Initialization();
 		
 	};
 
+	// funcs 
+	// 
+	// convert current pos to global
+	sf::Vector2f CurrentToGlobalPos(const sf::RenderWindow& window, const sf::Vector2f& pos);
 	
 
 

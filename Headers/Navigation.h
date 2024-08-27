@@ -8,24 +8,41 @@
 
 namespace Navigation {
 	
+	enum class BUTTON_ID {
+		START,
+		SETTINGS,
+		EXIT,
+
+
+
+
+		NONE
+	};
+
 	class MenuButton {
 	private:
 		sf::Text text_;
-
-
+		BUTTON_ID id_;
 
 	private:
 
 
 
 	public:
+		
+
 		MenuButton(
-			const std::string& name
+			const std::string& name,
+			BUTTON_ID id
 		);
 
 		void Draw(sf::RenderWindow& window) const;
 		void UpdatePosition(const sf::Vector2f& pos, float scale);
 		void IsHover(const sf::Vector2f& pos);
+		BUTTON_ID IsClicked(const sf::Vector2f& pos) const;
+
+
+		
 
 	};
 
@@ -46,7 +63,7 @@ namespace Navigation {
 		void Draw(sf::RenderWindow& window);
 		void Update(const sf::RenderWindow& window, float scale);
 		void IsHover(const sf::Vector2f& pos);
-		
+		void IsClicked(sf::RenderWindow& window, const sf::Vector2f& pos) const;
 
 
 	};
