@@ -10,12 +10,7 @@ namespace SolarSystem {
 	private:
 
 		// data
-		std::string name_;
-		float distance_;
-		float sunPeriod_; // day
-		float radius_; // * 10^4
-		float weight_; // * 10^25
-		float velocity_;
+		General::PlanetInfo info_;
 
 		// scales
 		float distanceScale_ = 100;
@@ -52,8 +47,7 @@ namespace SolarSystem {
 		std::unique_ptr<sf::CircleShape> ellipse_;
 
 	public:
-		Planet(const std::string& name, float distance, float period,
-			float diametr, float weight, float velocity);
+		Planet(const General::PlanetInfo& info);
 		void Draw(sf::RenderWindow& window) const;
 		void DrawEllipse(sf::RenderWindow& window) const;
 		virtual void UpdatePosition(float dt);
@@ -61,10 +55,11 @@ namespace SolarSystem {
 
 		// getters
 		float GetAngle() const { return angle_ - offsetAngle_; }
-		float GetDistance() const { return distance_; }
+		float GetDistance() const { return info_.distance; }
 		bool IsClicked(const sf::RenderWindow& window, sf::Vector2f pos) const;
-		const std::string& GetName() const { return name_; }
-		float GetRadius() const { return radius_;  }
+		const std::string& GetName() const { return info_.name; }
+		float GetRadius() const { return info_.radius;  }
+		const General::PlanetInfo& GetInfo() const { return info_; }
 	};
 
 	class Sun : public Planet {

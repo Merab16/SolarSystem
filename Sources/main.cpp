@@ -3,6 +3,9 @@
 
 #include "../Headers/Window.h"
 
+#include <iostream>
+#include <iomanip>
+
 
 // 1. Добавить общий класс Font в котором единожды будет определен шрифт для всей программы
 // 2(+). сделать вывод позиции курсора отностиельно окна
@@ -32,8 +35,6 @@
 
 
 int main() {
-
-
 
     MyWindow::Window window;
     window.Run();

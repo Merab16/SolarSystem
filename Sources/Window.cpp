@@ -194,15 +194,13 @@ namespace MyWindow {
 
 			for (const auto& planet : planetsBehind_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
-					std::cout << planet->GetName() << std::endl;
-					interface_->SetName(planet->GetName());
+					interface_->SetPlanet(planet->GetInfo());
 				} 
 			}
 
 			for (const auto& planet : planetsFrontOf_) {
 				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
-					std::cout << planet->GetName() << std::endl;
-					interface_->SetName(planet->GetName());
+					interface_->SetPlanet(planet->GetInfo());
 				}
 			}
 			
@@ -289,8 +287,7 @@ namespace MyWindow {
 
 		sun_ = new SolarSystem::Sun(60);
 		for (const auto& planet : General::planetsInfo) {
-			planetsBehind_.push_back(new SolarSystem::Planet(planet.name, planet.distance + 30, planet.sunPeriod,
-				planet.diametr, planet.weight, planet.velocity));
+			planetsBehind_.push_back(new SolarSystem::Planet(planet));
 		}
 	}
 

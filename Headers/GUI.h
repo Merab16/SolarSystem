@@ -5,34 +5,42 @@
 
 #include "Cursor.h"
 #include "Navigation.h"
+#include "General.h"
 
 namespace GUI {
+	
+
 
 	class PlanetInfoPanel {
-		struct PanelStructure {
-			std::string name;
-			std::string radius;
-			std::string distance;
-		};
-
-
-
 	private:
 		// Возможно сделать в сводке маленькую картинку этой планеты, которач будет вращаться
 		GeometricPrimitive::Rectangle area_;
-		sf::Text planetName_;
+		General::PlanetInfo info_;
+
+		// info
+		std::unique_ptr<sf::Text> name_;
+		std::unique_ptr<sf::Text> distance_;
+		std::unique_ptr<sf::Text> radius_;
+		std::unique_ptr<sf::Text> weight_; 
+		std::unique_ptr<sf::Text> velocity_;
+		std::unique_ptr<sf::Text> population_;
+
 	private:
-
-
+		void UpdateInformation();
+		void TextSettings(sf::Text& text, 
+			size_t char_size = 24,
+			sf::Color color = sf::Color::White,
+			const sf::Font& font = General::Fonts::MAIN);
 
 	public:
 		PlanetInfoPanel();
 
 		void Update(const sf::RenderWindow& window, const sf::Vector2f& pos, float scale);
+		
 		void Draw(sf::RenderWindow& window) const;
 		
 		// setters
-		void SetName(const std::string& name);
+		void SetPlanet(const General::PlanetInfo& info);
 	};
 
 	class Interface {
@@ -65,7 +73,7 @@ namespace GUI {
 		float& GetScale() { return guiScale_; }
 
 		// setters
-		void SetName(const std::string& name);
+		void SetPlanet(const General::PlanetInfo& info);
 
 
 

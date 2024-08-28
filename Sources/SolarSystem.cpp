@@ -21,16 +21,10 @@
 
 namespace SolarSystem {
 
-	Planet::Planet(const std::string& name, float distance, float period,
-		float diametr, float weight, float velocity)
-		: name_(name)
-		, distance_(distance)
-		, sunPeriod_(period)
-		, radius_(diametr / 2)
-		, weight_(weight)
-		, velocity_(velocity)
-		, ellipseA_(2 * distance)
-		, ellipseB_(distance)
+	Planet::Planet(const General::PlanetInfo& info)
+		: info_(info)
+		, ellipseA_(2 * (info.distance + 60))
+		, ellipseB_(info.distance + 60)
 		//, velocity_(radius * 0.01)
 	{
 		Initialization();
@@ -51,23 +45,23 @@ namespace SolarSystem {
 		ellipse_ = std::make_unique<sf::CircleShape>();
 
 		// texture 
-		if (!texture_->loadFromFile("Images/" + name_ + ".png")) {
-			std::cout << name_ + ".png can not find!" << std::endl;
+		if (!texture_->loadFromFile("Images/" + info_.name + ".png")) {
+			std::cout << info_.name + ".png can not find!" << std::endl;
 		}
 		texture_->setSmooth(true);
 
 		// sprite
 		sprite_->setTexture(*texture_);
 		sprite_->setTextureRect(sf::IntRect(0, 0, (int)General::SPRITE_SIZE, (int)General::SPRITE_SIZE));
-		sprite_->setScale(radius_ * 2 / (int)General::SPRITE_SIZE, radius_ * 2 / (int)General::SPRITE_SIZE);
+		sprite_->setScale((info_.radius) * 2 / (int)General::SPRITE_SIZE, (info_.radius) * 2 / (int)General::SPRITE_SIZE);
 
 
 
-		max_radius_ = radius_;
-		min_radius_ = 0.1f * radius_;
+		max_radius_ = (info_.radius);
+		min_radius_ = 0.1f * (info_.radius);
 
 
-		circle_->setRadius(radius_);
+		circle_->setRadius((info_.radius));
 		circle_->setPointCount(50);
 		circle_->setFillColor(RandomColor());
 
@@ -137,22 +131,22 @@ namespace SolarSystem {
 			offset.y + ((-ellipseB_) * sin(AngleToRad(angle_)) + (ellipseB_) * cos(AngleToRad(angle_)))
 		);
 		  
-		angle_ += (velocity_) * dt;
+		angle_ += (info_.velocity) * dt;
 		if (angle_ > 360 + offsetAngle_) angle_ -= 360;
 
-		float delta = 0.00008f * velocity_ * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
+		float delta = 0.00008f * info_.velocity * (1 - abs(sin(AngleToRad((360) - (angle_ - offsetAngle_)))));
 		//std::cout << angle_ - offsetAngle_ << std::endl;
 
 		if (angle_  > 270 + offsetAngle_ || angle_ <= 90 + offsetAngle_) {
- 			if (radius_ > min_radius_)
-				radius_ -= delta;
+ 			if (info_.radius > min_radius_)
+				info_.radius -= delta;
 		}
 		else {
-			if (radius_ < max_radius_)
-				radius_ += delta;
+			if (info_.radius < max_radius_)
+				info_.radius += delta;
 		}
 		 
-		circle_->setRadius(radius_);
+		circle_->setRadius(info_.radius);
 
 		
 		UpdateSprite();
@@ -185,7 +179,7 @@ namespace SolarSystem {
 
 	// constr & destr
 	Sun::Sun(float radius)
-		: Planet("Sun", 0, 0, 2 * radius, 0, 0)
+		: Planet({ "Sun", 0, 0, 2 * radius, 0, 0 })
 	{
 		circle_->setFillColor(sf::Color(200, 210, 21));
 	}
