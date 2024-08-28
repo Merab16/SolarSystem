@@ -9,8 +9,7 @@ namespace SolarSystem {
 	class Planet {
 	private:
 
-		// data
-		General::PlanetInfo info_;
+		
 
 		// scales
 		float distanceScale_ = 100;
@@ -31,7 +30,7 @@ namespace SolarSystem {
 
 
 	private:
-		void Initialization();
+		
 		
 		float AngleToRad(float angle);
 		float RadToAngle(float rad);
@@ -39,6 +38,12 @@ namespace SolarSystem {
 		sf::Color RandomColor() const;
 
 	protected:
+		// data
+		General::PlanetInfo info_;
+
+		virtual void Initialization();
+		virtual void UpdateSprite();
+
 		sf::Vector2f GetCenter(float w, float h, const sf::CircleShape& shape);
 		std::unique_ptr<sf::CircleShape> circle_;
 		std::unique_ptr<sf::Sprite> sprite_;
@@ -51,7 +56,7 @@ namespace SolarSystem {
 		void Draw(sf::RenderWindow& window) const;
 		void DrawEllipse(sf::RenderWindow& window) const;
 		virtual void UpdatePosition(float dt);
-		void UpdateSprite();
+		
 
 		// getters
 		float GetAngle() const { return angle_ - offsetAngle_; }
@@ -64,11 +69,12 @@ namespace SolarSystem {
 
 	class Sun : public Planet {
 	private:
-
+		size_t spriteCounter_ = 0;
 
 
 	private:
-
+		virtual void Initialization() override;
+		virtual void UpdateSprite() override;
 
 
 	public:

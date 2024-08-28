@@ -18,8 +18,20 @@
 // neptune	30.07	48.6k
 
 
+// sun
+// ffee00
+// f6a10c
+// 777431
+// fffacd
+// e8cd1b
+// ff4500
+// f5f5f5
+
+
 
 namespace SolarSystem {
+	using namespace General;
+
 
 	Planet::Planet(const General::PlanetInfo& info)
 		: info_(info)
@@ -181,19 +193,53 @@ namespace SolarSystem {
 	Sun::Sun(float radius)
 		: Planet({ "Sun", 0, 0, 2 * radius, 0, 0 })
 	{
-		circle_->setFillColor(sf::Color(200, 210, 21));
+		//circle_->setFillColor(sf::Color(200, 210, 21));
+		Initialization();
 	}
 
 
 	// private
-	void Sun::UpdatePosition(float dt) {
-		auto offset = GetCenter(General::WIDTH / 2, General::HEIGHT / 2, *circle_);
-		circle_->setPosition(offset.x, offset.y);
-		sprite_->setPosition(offset);
+
+	void Sun::Initialization() {
+		sprite_ = std::make_unique<sf::Sprite>();
+		texture_ = std::make_unique<sf::Texture>();
+
+
+		// texture 
+		if (!texture_->loadFromFile("Images/" + info_.name + ".png")) {
+			std::cout << info_.name + ".png can not find!" << std::endl;
+		}
+		texture_->setSmooth(true);
+
+		// sprite
+		sprite_->setTexture(*texture_);
+		sprite_->setTextureRect(sf::IntRect(0, 0, (int)SUN_SPRITE_SIZE, (int)SUN_SPRITE_SIZE));
+		sprite_->setScale((info_.radius) * 2 / (int)SUN_SPRITE_SIZE, (info_.radius) * 2 / (int)SUN_SPRITE_SIZE);
+
+	}
+
+	void Sun::UpdateSprite() {
+
+
+
+		sprite_->setTextureRect(sf::IntRect(
+			int(spriteCounter_ / SUN_SCALE_ROTATION) % SUN_SPRITE_WIDTH * SUN_SPRITE_SIZE,
+			int(spriteCounter_ / SUN_SCALE_ROTATION) / SUN_SPRITE_WIDTH * SUN_SPRITE_SIZE,
+			(int)SUN_SPRITE_SIZE, (int)SUN_SPRITE_SIZE
+		));
+
+		spriteCounter_++;
+		if (spriteCounter_ >= SUN_SPRITE_WIDTH * SUN_SPRITE_HEIGHT * SUN_SCALE_ROTATION) spriteCounter_ = 0;
 	}
 
 	// public
-
+	void Sun::UpdatePosition(float dt) {
+		sf::Vector2f offset = { 
+			WIDTH / 2 - (SUN_SPRITE_SIZE / 2 * sprite_->getScale().x), 
+			HEIGHT / 2 - (SUN_SPRITE_SIZE / 2 * sprite_->getScale().y) };
+		sprite_->setPosition(offset); 
+		UpdateSprite();
+	}
 
 
 }
