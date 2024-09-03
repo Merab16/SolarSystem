@@ -24,7 +24,7 @@ namespace General {
 	static float distanceScale = 10;
 	static float diametrScale = 5;
 	const float ONE_YEAR = 365.24f;
-	static size_t SPRITE_SIZE = 500;
+	//static size_t SPRITE_SIZE = 500;
 	
 	//static float PERIOD_SCALE = 0.055;
 	static float PERIOD_SCALE = 20;
@@ -35,6 +35,12 @@ namespace General {
 	static size_t SUN_SPRITE_HEIGHT = 8;
 	static size_t SUN_SCALE_ROTATION = 10;
 
+
+	//================= PLANETS =================//
+	static size_t SPRITE_SIZE = 500;
+	static size_t SPRITE_WIDTH = 16;
+	static size_t SPRITE_HEIGHT = 8;
+	static size_t SCALE_ROTATION = 10;
 
 
 	static std::vector<PlanetInfo> planetsInfo = {

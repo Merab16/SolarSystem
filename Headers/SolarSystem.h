@@ -65,6 +65,7 @@ namespace SolarSystem {
 		const std::string& GetName() const { return info_.name; }
 		float GetRadius() const { return info_.radius;  }
 		const General::PlanetInfo& GetInfo() const { return info_; }
+		sf::Vector2f GetCentre() const;
 	};
 
 	class Sun : public Planet {

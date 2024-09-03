@@ -65,6 +65,8 @@ namespace MyWindow {
 		
 		UpdateMenuPosition();
 
+
+		camera_.Update(*window_);
 		interface_->Update(*window_);
 
 
@@ -189,23 +191,34 @@ namespace MyWindow {
 	void Window::MousePressEvent(const sf::Event& e) {
 		
 		if (e.mouseButton.button == sf::Mouse::Left) {
+			auto interval = dcClock_.restart().asMilliseconds();
 			camera_.Start(cursor_.GetPosition());
+			camera_.SetPlanet(nullptr);
 			isPressed_ = true;
 
-			for (const auto& planet : planetsBehind_) {
-				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
-					interface_->SetPlanet(planet->GetInfo());
-				} 
-			}
+			
+			
+			if (interval < 250) {
+				std::cout << "Double click" << std::endl;
+				for (const auto& planet : planetsBehind_) {
+					if (planet->IsClicked(*window_, cursor_.GetPosition())) {
+						interface_->SetPlanet(planet->GetInfo());
+						camera_.SetPlanet(planet);
+					}
+				}
 
-			for (const auto& planet : planetsFrontOf_) {
-				if (planet->IsClicked(*window_, cursor_.GetPosition())) {
-					interface_->SetPlanet(planet->GetInfo());
+				for (const auto& planet : planetsFrontOf_) {
+					if (planet->IsClicked(*window_, cursor_.GetPosition())) {
+						interface_->SetPlanet(planet->GetInfo());
+						camera_.SetPlanet(planet);
+					}
 				}
 			}
+
+			
 			
 			interface_->IsClicked(*window_, CurrentToGlobalPos(*window_, cursor_.GetPosition()));
-
+			
 		}
 		
 

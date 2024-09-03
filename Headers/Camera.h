@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#include "SolarSystem.h"
 
 
 namespace Camera {
@@ -11,6 +12,9 @@ namespace Camera {
 		float offsetScale = 2.f;
 		float zoom_ = 1.f;
 		sf::Vector2f start_{ 0.f, 0.f };
+
+		// focus
+		const SolarSystem::Planet* planet_ = nullptr;
 
 	private:
 
@@ -24,6 +28,8 @@ namespace Camera {
 		sf::Vector2f Finish(const sf::Vector2f& pos);
 		void SetCenter();
 		void SetZoom();
+		void SetPlanet(const SolarSystem::Planet* planet);
+		void Update(sf::RenderWindow& window);
 
 		// getters
 		const sf::View& GetCamera() const { return camera_; }

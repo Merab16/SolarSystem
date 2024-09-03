@@ -47,6 +47,8 @@ namespace MyWindow {
 		// gui
 		std::unique_ptr<GUI::Interface> interface_;
 
+		// double click
+		sf::Clock dcClock_;
 
 		
 

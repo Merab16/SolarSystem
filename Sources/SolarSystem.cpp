@@ -166,12 +166,12 @@ namespace SolarSystem {
 	
 	void Planet::UpdateSprite() {
 		sprite_->setTextureRect(sf::IntRect(
-			((int)spriteCounter_ / int(General::PERIOD_SCALE) % 30) * (int)General::SPRITE_SIZE,
-			((int)spriteCounter_ / int(General::PERIOD_SCALE) / 30) * (int)General::SPRITE_SIZE,
-			(int)General::SPRITE_SIZE, (int)General::SPRITE_SIZE));
+			((int)spriteCounter_ / SCALE_ROTATION % SPRITE_WIDTH) * (int)SPRITE_SIZE,
+			((int)spriteCounter_ / SCALE_ROTATION / SPRITE_WIDTH) * (int)SPRITE_SIZE,
+			(int)SPRITE_SIZE, (int)SPRITE_SIZE));
 
 		spriteCounter_++;
-		if (spriteCounter_ == 60 * int(General::PERIOD_SCALE)) spriteCounter_ = 0;
+		if (spriteCounter_ >= SPRITE_WIDTH * SPRITE_HEIGHT * SCALE_ROTATION) spriteCounter_ = 0;
 	}
 
 
@@ -241,5 +241,9 @@ namespace SolarSystem {
 		UpdateSprite();
 	}
 
-
+	// getters
+	sf::Vector2f Planet::GetCentre() const {
+		return { sprite_->getPosition().x + (SPRITE_SIZE / 2) * sprite_->getScale().x,
+			sprite_->getPosition().y + (SPRITE_SIZE / 2) * sprite_->getScale().y};
+	}
 }

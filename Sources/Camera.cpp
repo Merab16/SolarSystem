@@ -7,7 +7,9 @@
 
 
 namespace Camera {
-	
+	using namespace General;
+
+
 	// constr & destr
 	Camera::Camera() {
 		offset_ = sf::Vector2f(General::WIDTH / 2, General::HEIGHT / 2);
@@ -30,8 +32,19 @@ namespace Camera {
 		camera_.setCenter(offset_);
 	}
 
+
 	void Camera::SetZoom() {
 		camera_.zoom(zoom_);
 	}
 
+	void Camera::SetPlanet(const SolarSystem::Planet* planet) {
+		planet_ = planet;
+	}
+
+	void Camera::Update(sf::RenderWindow& window) {
+		if (planet_ != nullptr) {
+			camera_.setCenter(planet_->GetCentre());
+			window.setView(camera_);
+		}
+	}
 }
